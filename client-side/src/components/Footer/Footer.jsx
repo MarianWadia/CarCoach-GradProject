@@ -53,8 +53,8 @@ const Footer = () => {
           <Col lg="4" md="4" sm="12">
             <div className="logo footer__logo">
               <h1>
-                <Link to="/home" className=" d-flex align-items-center gap-2">
-                  <AiFillCar size={100} color='#fff'/>
+                <Link to="/home" className="d-flex align-items-center gap-2">
+                  <AiFillCar size={150} color='#fff'/>
                   <span>CarCoach</span>
                 </Link>
               </h1>

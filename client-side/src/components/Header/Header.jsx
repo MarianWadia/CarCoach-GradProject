@@ -1,48 +1,49 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import {Container, Row, Col} from "reactstrap"
 import {AiFillPhone, AiOutlineLogin, AiOutlineUser, AiFillCar, AiOutlineFieldTime, AiOutlineSearch, AiOutlineMenu} from "react-icons/ai"
 import {HiOutlineLocationMarker} from "react-icons/hi"
 import {Link, NavLink} from "react-router-dom"
 import "../../styles/header.css"
 
+const navLinks = [
+  {
+    path: "/home",
+    display: "Home",
+  },
+  {
+    path: "/tutors",
+    display: "Tutors",
+  },
+  {
+    path: "/cars",
+    display: "Renting cars",
+  },
+  {
+    path: "/blogs",
+    display: "Blog",
+  },
+  {
+    path: "/about",
+    display: "About",
+  },
+  {
+    path: "/earn-with-us",
+    display: "Earn with us",
+  },
+  {
+    path: "/join-us",
+    display: "Join us",
+  },
+  {
+    path: "/contact",
+    display: "Contact",
+  },
+];
 
+const Header = () => {  
+  const menuRef = useRef(null)
+  const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
 
-const Header = () => {
-  
-  const navLinks = [
-    {
-      path: "/home",
-      display: "Home",
-    },
-    {
-      path: "/tutors",
-      display: "Tutors",
-    },
-    {
-      path: "/cars",
-      display: "Renting cars",
-    },
-    {
-      path: "/blogs",
-      display: "Blog",
-    },
-    {
-      path: "/about",
-      display: "About",
-    },
-    {
-      path: "/earn-with-us",
-      display: "Earn with us",
-    },
-    {
-      path: "/join-us",
-      display: "Join us",
-    },
-    {
-      path: "/contact",
-      display: "Contact",
-    },
-  ];
   return (
     <header className='header'>
       <div className="header__top">
@@ -60,11 +61,11 @@ const Header = () => {
 
             <Col lg="6" md="6" sm="6">
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-                <Link to="/signin" className='d-flex align-items-center gap-1'>
+                <Link to="/signin" onClick={window.Location = "/signin"} className='d-flex align-items-center gap-1'>
                   <AiOutlineLogin color='black' size={21}/>
                   <span>Login</span>
                 </Link>
-                <Link to="/signup" className='d-flex align-items-center gap-1'>
+                <Link to="/signup" onClick={window.Location = "/signup"} className='d-flex align-items-center gap-1'>
                   <AiOutlineUser color='black' size={21}/>
                   <span>Register</span>
                 </Link>
@@ -128,9 +129,9 @@ const Header = () => {
       <div className="main__navbar">
         <Container>
         <div className="navigation__wrapper d-flex align-items-center justify-content-between">
-          <AiOutlineMenu size={25} color='#ffff' className='mobile__menu'/>
+          <AiOutlineMenu size={25} color='#ffff' className='mobile__menu' onClick={toggleMenu}/>
 
-          <div className='navigation'>
+          <div className='navigation' ref={menuRef} onClick={toggleMenu}>
             <div className="menu">
               {navLinks.map((link, index)=>(
                 <NavLink to={link.path} key={index} className={(navClass) =>

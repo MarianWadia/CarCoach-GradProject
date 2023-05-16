@@ -1,11 +1,11 @@
-import img01 from "../all-images/cars-img/nissan-offer.png";
-import img02 from "../all-images/cars-img/offer-toyota.png";
-import img03 from "../all-images/cars-img/bmw-offer.png";
-import img04 from "../all-images/cars-img/nissan-offer.png";
-import img05 from "../all-images/cars-img/offer-toyota.png";
-import img06 from "../all-images/cars-img/mercedes-offer.png";
-import img07 from "../all-images/cars-img/toyota-offer-2.png";
-import img08 from "../all-images/cars-img/mercedes-offer.png";
+import img01 from "../images/cars-img/nissan-offer.png";
+import img02 from "../images/cars-img/offer-toyota.png";
+import img03 from "../images/cars-img/bmw-offer.png";
+import img04 from "../images/cars-img/nissan-offer.png";
+import img05 from "../images/cars-img/offer-toyota.png";
+import img06 from "../images/cars-img/mercedes-offer.png";
+import img07 from "../images/cars-img/toyota-offer-2.png";
+import img08 from "../images/cars-img/mercedes-offer.png";
 
 const carData = [
   {

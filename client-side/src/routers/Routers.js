@@ -11,8 +11,6 @@ import TutorDetails from "../pages/TutorDetails"
 import NotFound from "../pages/NotFound"
 import Contact from "../pages/Contact"
 import UploadCar from "../pages/UploadCar"
-import Signin from "../pages/Signin"
-import Signup from "../pages/Signup"
 import JoinUs from "../pages/JoinUs"
 
 
@@ -30,8 +28,6 @@ const Routers = () => {
         <Route path='/earn-with-us' element={<UploadCar/>} />
         <Route path='/blogs' element={<Blog/>} />        
         <Route path='/blog/:id' element={<BlogDetails/>} />
-        <Route path='/signin' element={<Signin/>} />
-        <Route path='/signup' element={<Signup/>} />
         <Route path='/join-us' element={<JoinUs/>} />
         <Route path='*' element={<NotFound/>} />
     </Routes>

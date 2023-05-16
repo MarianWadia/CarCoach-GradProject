@@ -10,6 +10,11 @@
     line-height: 30px;
 }
 
+.footer__logo span {
+    color: #fff;
+    font-weight: 500;
+}
+  
 .quick__link {
     border: none !important;
     background-color: inherit !important ;
@@ -23,7 +28,7 @@
 }
 
 .quick__link a:hover {
-     
+    color: #f9a826;
 }
   
 .footer__link-title {
