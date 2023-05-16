@@ -21,13 +21,13 @@ const Routers = () => {
         <Route path='/home' element={<Home/>} />
         <Route path='/about' element={<About/>} />
         <Route path='/cars' element={<CarListing/>} />
-        <Route path='/cars/:id' element={<CarDetails/>} />
+        <Route path='/cars/:slug' element={<CarDetails/>} />
         <Route path='/tutors' element={<TutorListing/>} />
-        <Route path='/tutors/:id' element={<TutorDetails/>} />
+        <Route path='/tutors/:slug' element={<TutorDetails/>} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/earn-with-us' element={<UploadCar/>} />
         <Route path='/blogs' element={<Blog/>} />        
-        <Route path='/blog/:id' element={<BlogDetails/>} />
+        <Route path='/blogs/:slug' element={<BlogDetails/>} />
         <Route path='/join-us' element={<JoinUs/>} />
         <Route path='*' element={<NotFound/>} />
     </Routes>
