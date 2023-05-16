@@ -1,6 +1,7 @@
 import React from 'react'
 import "../../styles/reserve-form.css";
 import { Form, FormGroup } from "reactstrap";
+import { Link } from 'react-router-dom';
 
 const ReserveForm = () => {
   return (
@@ -30,7 +31,9 @@ const ReserveForm = () => {
       </FormGroup>
 
       <FormGroup className="form__group">
-        <button className="btn find__car-btn">Find Tutor</button>
+        <Link to="/tutors">
+          <button className="btn find__car-btn">Find Tutor</button>
+        </Link>
       </FormGroup>
     </div>
   </Form>

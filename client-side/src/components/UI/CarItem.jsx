@@ -10,7 +10,7 @@ const CarItem = (props) => {
     <Col lg="4" md="4" sm="6" className="mb-5">
       <div className="car__item">
         <div className="car__img">
-          <img src={imgUrl} alt="" className="w-100" />
+          <img src={imgUrl} alt="" className="w-100 car__item__img" />
         </div>
 
         <div className="car__item-content mt-4">

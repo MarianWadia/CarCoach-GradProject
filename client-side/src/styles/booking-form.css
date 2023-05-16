@@ -23,6 +23,36 @@
     color: #7c8a97;
     margin-right: 0.5rem;
   }
+
+  .time__picker__earn::before {
+    content: "Pickup Time";
+    color: #7c8a97;
+    margin-right: 0.5rem;
+  }
+
+  .time__picker__join::before {
+    content: "Interview Time";
+    color: #7c8a97;
+    margin-right: 0.5rem;
+  }
+
+  .upload__image__earn::before {
+    content: "Upload car image";
+    color: #7c8a97;
+    margin-right: 5rem;
+  }
+
+  .upload__image__tutor::before {
+    content: "Upload your image";
+    color: #7c8a97;
+    margin-right: 5rem;
+  }
+
+  .upload__image__doc1::before {
+    content: "Upload License Document";
+    color: #7c8a97;
+    margin-right: 5rem;
+  }
   
   .textarea:focus,
   .booking__form input:focus,

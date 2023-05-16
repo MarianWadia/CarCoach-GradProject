@@ -3,6 +3,12 @@
     padding: 20px;
     border-radius: 5px;
   }
+
+  .car__item__img{
+    overflow: hidden;
+    background-size: cover;
+    max-height: 220px;
+  }
   
   .car__item-info span i {
     color: #f9a826;
