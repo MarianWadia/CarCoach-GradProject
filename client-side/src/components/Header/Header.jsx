@@ -61,11 +61,11 @@ const Header = () => {
 
             <Col lg="6" md="6" sm="6">
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-                <Link to="/signin" onClick={window.Location = "/signin"} className='d-flex align-items-center gap-1'>
+                <Link to="/signin" onClick={window.Location.href = "/signin"} className='d-flex align-items-center gap-1'>
                   <AiOutlineLogin color='black' size={21}/>
                   <span>Login</span>
                 </Link>
-                <Link to="/signup" onClick={window.Location = "/signup"} className='d-flex align-items-center gap-1'>
+                <Link to="/signup" onClick={window.Location.href = "/signup"} className='d-flex align-items-center gap-1'>
                   <AiOutlineUser color='black' size={21}/>
                   <span>Register</span>
                 </Link>
