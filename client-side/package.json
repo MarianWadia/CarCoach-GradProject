@@ -17,6 +17,7 @@
     "reactstrap": "^9.1.10",
     "remixicon": "^3.2.0",
     "slick-carousel": "^1.8.1",
+    "sweetalert": "^2.1.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

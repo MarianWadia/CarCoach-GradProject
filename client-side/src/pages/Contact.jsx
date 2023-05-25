@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Form, FormGroup, Input } from "reactstrap";
+import { Container, Row, Col, Form, FormGroup, Input, Button } from "reactstrap";
 import DocumentTitle from "../components/DocumentTitle/DocumentTitle.js";
 import CommonSection from "../components/UI/CommonSection";
+import swal from "sweetalert"
+import axios from "axios"
 
 import "../styles/contact.css";
 
@@ -26,6 +28,54 @@ const socialLinks = [
 ];
 
 const Contact = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/contact-us', {
+        name: name,
+        email: email,
+        message: message
+      });
+
+      setSuccess(true);
+      if(success){
+        swal({
+          title: "Thank you for contacting us!",
+          text: "We will contact you back shortly!",
+          icon: "success",
+          button: "Done",
+        });
+        setName('');
+        setEmail('');
+        setMessage('');
+      }
+      
+    } catch (error) {
+      console.error(error);
+      setError('An error occurred. Please try again later.');
+      if(error){
+        swal({
+          title: "Try Again later",
+          text: "An error occurred. Please try again later!",
+          icon: "error",
+          button: "close",
+        });
+      }
+    }
+  };
+
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <DocumentTitle title="Contact">
       <CommonSection title="Contact" />
@@ -35,24 +85,26 @@ const Contact = () => {
             <Col lg="7" md="7">
               <h6 className="fw-bold mb-4">Get In Touch</h6>
 
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 <FormGroup className="contact__form">
-                  <Input placeholder="Your Name" type="text" />
+                  <Input placeholder="Your Name" type="text" value={name} onChange={(event) => setName(event.target.value)}/>
                 </FormGroup>
                 <FormGroup className="contact__form">
-                  <Input placeholder="Email" type="email" />
+                  <Input placeholder="Email" type="email" value={email} onChange={(event) => setEmail(event.target.value)}/>
                 </FormGroup>
                 <FormGroup className="contact__form">
                   <textarea
                     rows="5"
                     placeholder="Message"
                     className="textarea"
+                    value={message}
+                    onChange={(event) => setMessage(event.target.value)}
                   ></textarea>
                 </FormGroup>
 
-                <button className="contact__btn" type="submit">
+                <Button className="contact__btn" type="submit">
                   Send Message
-                </button>
+                </Button>
               </Form>
             </Col>
 

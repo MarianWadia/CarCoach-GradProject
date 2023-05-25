@@ -41,8 +41,8 @@ CREATE TABLE IF NOT EXISTS tutor_reservations (
   id SERIAL PRIMARY KEY,
   student_id INTEGER REFERENCES students(id),
   tutor_id INTEGER REFERENCES tutors(id),
-  start_time TIMESTAMP NOT NULL,
-  end_time TIMESTAMP NOT NULL,
+  start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  end_time TIMESTAMP WITH TIME ZONE NOT NULL,
   location TEXT,
   status VARCHAR(255)
 );
@@ -51,14 +51,14 @@ CREATE TABLE IF NOT EXISTS reservation_payments (
   id SERIAL PRIMARY KEY,
   reservation_id INTEGER REFERENCES tutor_reservations(id),
   amount NUMERIC NOT NULL,
-  payment_time TIMESTAMP NOT NULL
+  payment_time TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tutor_payments (
   id SERIAL PRIMARY KEY,
   tutor_id INTEGER REFERENCES tutors(id),
   amount NUMERIC NOT NULL,
-  payment_time TIMESTAMP NOT NULL
+  payment_time TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS rentals (
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS rentals (
   user_id INTEGER REFERENCES users(id),
   reservation_id INTEGER REFERENCES tutor_reservations(id),
   car_id INTEGER REFERENCES cars(id),
-  start_time TIMESTAMP NOT NULL,
-  end_time TIMESTAMP NOT NULL,
+  start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  end_time TIMESTAMP WITH TIME ZONE NOT NULL,
   pickup_location TEXT,
   return_location TEXT,
   status VARCHAR(255)
@@ -77,5 +77,14 @@ CREATE TABLE IF NOT EXISTS rental_payments (
   id SERIAL PRIMARY KEY,
   rental_id INTEGER REFERENCES rentals(id),
   amount NUMERIC NOT NULL,
-  payment_time TIMESTAMP NOT NULL
+  payment_time TIMESTAMP WITH TIME ZONE NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS contacts (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  message TEXT NOT NULL,
+  message_timestamp TIMESTAMP WITH TIME ZONE NOT NULL
+);
+

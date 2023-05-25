@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import DocumentTitle from "../components/DocumentTitle/DocumentTitle"
 import CommonSection from "../components/UI/CommonSection"
 import { Col, Container, Row } from 'reactstrap'
 import BookingForm from '../components/UI/BookingForm'
 
 const JoinUs = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <DocumentTitle title="Join us">
       <CommonSection title="Apply to be a Tutor" />
