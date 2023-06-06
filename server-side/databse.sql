@@ -1,11 +1,65 @@
 CREATE DATABASE IF NOT EXISTS carcoach;
 
+-- *DONE*
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
-  first_name VARCHAR(255) UNIQUE NOT NULL,
-  last_name VARCHAR(255) UNIQUE NOT NULL,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL
+  password VARCHAR(255) NOT NULL,
+  token VARCHAR(255) UNIQUE NOT NULL,
+  reset_token VARCHAR(255) DEFAULT NULL,
+  reset_token_expires_at TIMESTAMP WITH TIME ZONE DEFAULT NULL
+);
+
+-- *DONE*
+CREATE TABLE IF NOT EXISTS tutors_applicants (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  age INTEGER NOT NULL,
+  gender VARCHAR(20) NOT NULL,
+  address TEXT NOT NULL,
+  is_own_car BOOLEAN,
+  is_accepted BOOLEAN NOT NULL DEFAULT FALSE,
+  experience_years INTEGER NOT NULL,
+  driver_license VARCHAR(255) NOT NULL,
+  driver_image VARCHAR(255) NOT NULL,
+  working_location VARCHAR(255) NOT NULL,
+  interview_time TIME NOT NULL,
+  interview_date DATE NOT NULL,
+  bio TEXT NOT NULL
+);
+
+-- *Not Created yet
+-- CREATE TABLE IF NOT EXISTS tutor_cars (
+--   id SERIAL PRIMARY KEY,
+--   tutor_id INTEGER REFERENCES tutors_applicants(id),
+--   -- motor_type ENUM('manual', 'automatic') NOT NULL,
+--   -- model VARCHAR(255) NOT NULL,
+--   -- year INTEGER NOT NULL,
+--   -- color VARCHAR(255),
+--   -- license_plate VARCHAR(20) UNIQUE NOT NULL,
+--   car_image VARCHAR(255) NOT NULL,
+--   car_id INTEGER REFERENCES car_uploads(id),
+--   usage VARCHAR(255) DEFAULT 'coaching' NOT NULL,
+-- )
+
+CREATE TABLE IF NOT EXISTS car_uploads (
+  id SERIAL PRIMARY KEY,
+  tutor_id INTEGER REFERENCES tutors_applicants(id),
+  motor_type VARCHAR(255) NOT NULL CHECK (motor_type IN ('manual', 'automatic')),
+  model VARCHAR(255) NOT NULL,
+  year INTEGER NOT NULL,
+  color VARCHAR(255),
+  license_plate VARCHAR(20) UNIQUE NOT NULL,
+  car_image VARCHAR(255) NOT NULL,
+  available BOOLEAN NOT NULL DEFAULT TRUE,
+  owner_id INTEGER REFERENCES users(id),
+  usage VARCHAR(255) NOT NULL CHECK (usage IN ('coaching', 'renting')),
+  is_tutor BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS students (
@@ -14,27 +68,6 @@ CREATE TABLE IF NOT EXISTS students (
   name VARCHAR(255) NOT NULL,
   phone VARCHAR(20),
   address TEXT
-);
-
-CREATE TABLE IF NOT EXISTS tutors (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id),
-  name VARCHAR(255) NOT NULL,
-  phone VARCHAR(20),
-  address TEXT,
-  is_own_car BOOLEAN NOT NULL DEFAULT FALSE
-);
-
-CREATE TABLE IF NOT EXISTS cars (
-  id SERIAL PRIMARY KEY,
-  motor_type VARCHAR(255) NOT NULL,
-  model VARCHAR(255) NOT NULL,
-  year INTEGER NOT NULL,
-  color VARCHAR(255),
-  license_plate VARCHAR(20) UNIQUE NOT NULL,
-  available BOOLEAN NOT NULL DEFAULT TRUE,
-  owner_id INTEGER REFERENCES users(id),
-  tutor_id INTEGER REFERENCES tutors(id)
 );
 
 CREATE TABLE IF NOT EXISTS tutor_reservations (
@@ -80,6 +113,7 @@ CREATE TABLE IF NOT EXISTS rental_payments (
   payment_time TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
+-- *DONE*
 CREATE TABLE IF NOT EXISTS contacts (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,

@@ -14,7 +14,7 @@ const Signin = () => {
     event.preventDefault();
     console.log('Form submitted');
     try {
-      const response = await axios.post('http://localhost:8080/api/signin', { email, password });
+      const response = await axios.post('http://localhost:8080/api/users/signin', { email, password });
       localStorage.setItem('token', response.data.token);
       window.location.href = '/';
     } catch (err) {
@@ -35,7 +35,9 @@ const Signin = () => {
             {error && <p className="error__message">{error}</p>}
             <button type='submit' className='signin__button'>Sign in</button>
           </form>
+          <Link to="/forgot" className='signup__content'>
           <h4 className='forget__password'>forget password?</h4>
+          </Link>
           <h5 className='login__with'>or login with</h5>
           <hr className='horizontal__line' />
           <div className="icons__container">

@@ -11,14 +11,23 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-const signingInRouter = require('./routes/signin');
-const signingUpRouter = require('./routes/signup');
+
+const userRoutes = require('./routes/userRoutes');
+const passwordRoutes = require('./routes/passwordRoutes');
 const contactsRouter = require('./routes/contact-us');
+const tutorRoutes = require('./routes/tutorRoutes');
 
-app.use('/api',signingInRouter);
-app.use('/api',signingUpRouter);
+
+
+app.use('/api/users',userRoutes);
+app.use('/api/password', passwordRoutes);
 app.use('/api',contactsRouter);
-
+app.use('/api', tutorRoutes);
+app.use('/api/tutor-image', express.static('upload/tutors'))
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  next();
+})
 
 
 app.listen(port, () => {

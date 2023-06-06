@@ -5,7 +5,13 @@ import Footer from '../Footer/Footer'
 import SpecialRoutes from '../../routers/SpecialRoutes'
 
 const Layout = () => {
-  if (window.location.pathname === "/signin" || window.location.pathname === "/signup"){
+  // checks for a route that starts with /reset/ followed by one or more characters
+  const resetRoutePattern = /^\/reset\/.+$/;
+  if (window.location.pathname === "/signin" || 
+      window.location.pathname === "/signup" || 
+      window.location.pathname === "/forgot" || 
+      resetRoutePattern.test(window.location.pathname)
+      ){
     return(
       <>
         <div>

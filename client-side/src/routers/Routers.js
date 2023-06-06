@@ -11,25 +11,27 @@ import TutorDetails from "../pages/TutorDetails"
 import NotFound from "../pages/NotFound"
 import Contact from "../pages/Contact"
 import UploadCar from "../pages/UploadCar"
+import UploadTutorCar from "../pages/UploadTutorCar"
 import JoinUs from "../pages/JoinUs"
 
 
 const Routers = () => {
   return (
     <Routes>
-        <Route path='/' element={<Navigate to="/home" />} />
-        <Route path='/home' element={<Home/>} />
-        <Route path='/about' element={<About/>} />
-        <Route path='/cars' element={<CarListing/>} />
-        <Route path='/cars/:slug' element={<CarDetails/>} />
-        <Route path='/tutors' element={<TutorListing/>} />
-        <Route path='/tutors/:name' element={<TutorDetails/>} />
-        <Route path='/contact' element={<Contact/>} />
-        <Route path='/earn-with-us' element={<UploadCar/>} />
-        <Route path='/blogs' element={<Blog/>} />        
-        <Route path='/blogs/:slug' element={<BlogDetails/>} />
-        <Route path='/join-us' element={<JoinUs/>} />
-        <Route path='*' element={<NotFound/>} />
+        <Route exact path='/' element={<Navigate to="/home" />} />
+        <Route exact path='/home' element={<Home/>} />
+        <Route exact path='/about' element={<About/>} />
+        <Route exact path='/cars' element={<CarListing/>} />
+        <Route exact path='/cars/:slug' element={<CarDetails/>} />
+        <Route exact path='/tutors' element={<TutorListing/>} />
+        <Route exact path='/tutors/:name' element={<TutorDetails/>} />
+        <Route exact path='/contact' element={<Contact/>} />
+        <Route exact path='/earn-with-us' element={<UploadCar/>} />
+        <Route exact path='/blogs' element={<Blog/>} />        
+        <Route exact path='/blogs/:slug' element={<BlogDetails/>} />
+        <Route exact path='/join-us' element={<JoinUs/>} />
+        <Route exact path='/upload-car' element={<UploadTutorCar/>} />
+        <Route exact path='*' element={<NotFound/>} />
     </Routes>
   )
 }
