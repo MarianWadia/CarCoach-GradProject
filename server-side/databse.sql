@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS tutors_applicants (
   bio TEXT NOT NULL
 );
 
--- *Not Created yet
+-- *will not be Created yet
 -- CREATE TABLE IF NOT EXISTS tutor_cars (
 --   id SERIAL PRIMARY KEY,
 --   tutor_id INTEGER REFERENCES tutors_applicants(id),

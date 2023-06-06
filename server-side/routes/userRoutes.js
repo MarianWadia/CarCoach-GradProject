@@ -14,9 +14,7 @@ router.post('/signup', async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
       const result = await pool.query('INSERT INTO users (first_name, last_name, email, password, token) VALUES ($1, $2, $3, $4, $5) RETURNING *', [firstName, lastName, email, hashedPassword, "data"]);
       const id = result.rows[0].id;
-      console.log(id)
       const token = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-      console.log(process.env.JWT_SECRET);
       const insertToken = await pool.query('UPDATE users SET token = $1 WHERE id = $2', [token, id]);
       res.status(201).json({ token, id });
     } catch (err) {
@@ -38,7 +36,6 @@ router.post('/signup', async (req, res) => {
         return res.status(401).json({ message: 'Invalid email or password' });
       }
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-      console.log(process.env.JWT_SECRET);
       const updateToken = await pool.query('UPDATE users SET token = $1 WHERE id = $2', [token, user.id]);
       res.json({ token });
     } catch (err) {
@@ -81,7 +78,6 @@ router.post('/signup', async (req, res) => {
         req.user = decoded.id;
         next();
       } catch (error) {
-        console.log(token)
         console.log(error)
         return res.status(401).json({ error: 'Invalid token', message: error.message });
       }
