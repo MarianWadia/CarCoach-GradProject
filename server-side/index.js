@@ -24,6 +24,7 @@ app.use('/api/password', passwordRoutes);
 app.use('/api',contactsRouter);
 app.use('/api', tutorRoutes);
 app.use('/api/tutor-image', express.static('upload/tutors'))
+app.use('/api/car-image', express.static('upload/cars'))
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   next();

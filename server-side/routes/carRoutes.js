@@ -7,11 +7,11 @@ const path = require('path');
 dotenv.config();
 
 const router = express.Router();
-const carImages = path.resolve(__dirname, '..', 'upload', 'cars');
 
+const carsImagesDir = path.resolve(__dirname, '..', 'upload', 'cars');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, carImages); // Set the folder where you want to store the images
+        cb(null, carsImagesDir); // Set the folder where you want to store the images
     },
     filename: function (req, file, cb) {
         const fileExtension = path.extname(file.originalname);
@@ -21,39 +21,57 @@ const storage = multer.diskStorage({
   })
   const upload = multer({ storage: storage });
 
-
-  router.post('/upload-car/:id', upload.single('car_image'), async (req, res) => {
+  router.post('/car_uploads/:id', upload.single('car_image'), async (req, res) => {
     try {
         const user_id = req.params.id;
-        const {
-            first_name,
-            last_name,
-            phone,
-            gender,
-            working_location,
-            age,
-            address,
-            is_own_car,
-            experience_years,
-            interview_time,
-            interview_date,
-            details
-        } = req.body;
-        const driver_license = req.files['driver_license'][0];
-        const driver_image = req.files['driver_image'][0];
-        const result = await pool.query(
-            'INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, age, gender, address, is_own_car, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, details) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *', 
-            [user_id, first_name, last_name, phone, age, 
-              gender, address, is_own_car, experience_years, 
-              driver_license.path, driver_image.path, 
-              working_location, interview_time, 
-              interview_date, 
-              details
-            ]);
-        const id = result.rows[0];
-        res.status(201).json({ id });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'An error occurred' });
+        const{ motor_type, color, model, year, license_plate, hour_price, hour_speed, details, available_from, usage} = req.body;
+        const car_image_file = req.file("car_image").path;
+        const fileName = path.basename(car_image_file);
+        const car_image = `http://localhost:8080/api/car-image/${fileName}`
+        const carInsert = await pool.query(`INSERT INTO car_uploads (owner_id, motor_type, color, model, year, license_plate, car_image, hour_price, hour_speed, details, available_from, usage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`, [
+            user_id,
+            motor_type, 
+            color,
+            model,
+            year,
+            license_plate,
+            car_image,
+            hour_price,
+            hour_speed,
+            details,
+            available_from,
+            usage
+        ]);
+        res.status(201).json("Car Data Uploaded successfully!")
+    }catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred' });
+      }
+  })
+
+
+  router.get("/car_uploads", async (req, res)=>{
+    try {
+        const result = await pool.query('SELECT * FROM tutors_applicants WHERE available=true');
+        const response = result.rows;
+        res.status(200).json(response)
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred' });
     }
 })
+
+  router.get("/car_uploads/:id", async (req, res)=>{
+    try {
+        const car_id= req.params.id;
+        const result = await pool.query('SELECT * FROM car_uploads WHERE id = ($1)', [car_id]);
+        const response = result.rows[0];
+        res.status(200).json(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+})
+
+  module.exports = router;
+

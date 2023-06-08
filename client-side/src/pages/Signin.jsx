@@ -16,7 +16,8 @@ const Signin = () => {
     try {
       const response = await axios.post('http://localhost:8080/api/users/signin', { email, password });
       localStorage.setItem('token', response.data.token);
-      window.location.href = '/';
+      const id = response.data.id;
+      window.location.href = `/home/${id}`;
     } catch (err) {
       console.error(err);
       setError('Invalid email or password');

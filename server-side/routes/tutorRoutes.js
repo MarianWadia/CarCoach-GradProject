@@ -42,13 +42,15 @@ router.post('/tutors-applicants/:id', upload.fields([
             interview_date,
             bio
         } = req.body;
-        const driver_license = req.files['driver_license'][0];
-        const driver_image = req.files['driver_image'][0];
+        const driver_license = req.files['driver_license'][0].path;
+        const driver_image_file = req.files['driver_image'][0].path;
+        const fileName = path.basename(driver_image_file);
+        const driver_image = `http://localhost:8080/api/tutor-image/${fileName}`
         const result = await pool.query(
             'INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, age, gender, address, is_own_car, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *', 
             [user_id, first_name, last_name, phone, age, 
               gender, address, is_own_car, experience_years, 
-              driver_license.path, driver_image.path, 
+              driver_license, driver_image, 
               working_location, interview_time, 
               interview_date, 
               bio
@@ -67,17 +69,22 @@ router.post('/tutors-applicants/:id', upload.fields([
 router.post('/car/:tutorId', upload.single('car_image'), async(req, res)=>{
     try {
         const {tutorId} = req.params
-        const{ motor_type, color, model, year, license_plate} = req.body;
-        const car_image = req.file("car_image");
-        // ***they are meade just needed to be tested
-        const carInsert = await pool.query(`INSERT INTO car_uploads (tutor_id, motor_type, color, model, year, license_plate, car_image, usage) VALUES ($1, $2, $3, $4, $5, $6, 'coaching') RETURNING id`, [
+        const{ motor_type, color, model, year, license_plate, hour_price, hour_speed, details} = req.body;
+        const car_image_file = req.file("car_image").path;
+        const fileName = path.basename(car_image_file);
+        const car_image = `http://localhost:8080/api/tutor-image/${fileName}`
+        // ***they are made just needed to be tested
+        const carInsert = await pool.query(`INSERT INTO car_uploads (tutor_id, motor_type, color, model, year, license_plate, car_image, hour_price, hour_speed, details, usage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9 'coaching') RETURNING id`, [
             tutorId,
             motor_type, 
             color,
             model,
             year,
             license_plate,
-            car_image
+            car_image,
+            hour_price,
+            hour_speed,
+            details
         ]);
         res.status(201).json("Car Data Uploaded successfully!")
     } catch (error) {
@@ -85,16 +92,28 @@ router.post('/car/:tutorId', upload.single('car_image'), async(req, res)=>{
     }
 })
 
+
+router.get("/tutors-applicants", async (req, res)=>{
+    try {
+        const result = await pool.query('SELECT * FROM tutors_applicants WHERE is_accepted=true');
+        const response = result.rows;
+        res.status(200).json(response)
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+})
+
+
 router.get("/tutors-applicants/:id", async (req, res)=>{
     try {
         const { id } = req.params;
-        const result = await pool.query('SELECT is_accepted, first_name, last_name, phone, age, gender, experience_years, driver_image, working_location, details FROM tutors_applicants WHERE id = ($1)', [
+        const result = await pool.query('SELECT is_accepted, first_name, last_name, phone, age, gender, experience_years, driver_image, working_location, bio FROM tutors_applicants WHERE id = ($1)', [
             id
         ]);
         const is_accepted = result.rows[0].is_accepted
         if(is_accepted===true){
-            const {first_name, last_name, phone, age, gender, experience_years, driver_image, working_location, details} = result.rows[0];
-            const fileName = path.basename(driver_image);
+            const {first_name, last_name, phone, age, gender, experience_years, driver_image, working_location, bio} = result.rows[0];
             const response = {
                 name: `${first_name}${last_name}`,
                 phone,
@@ -102,8 +121,8 @@ router.get("/tutors-applicants/:id", async (req, res)=>{
                 gender,
                 experience_years,
                 working_location,
-                details,
-                driver_image: `http://localhost:8080/api/tutor-image/${fileName}`
+                bio,
+                driver_image
             }
             res.status(200).json(response);
         }

@@ -16,7 +16,7 @@ const Home = () => {
       <DocumentTitle title="Home">
         <section className="p-0 hero__slider-section">
           <HeroSlider />
-
+          
           <div className="hero__form">
             <Container>
               <Row className="form__row">

@@ -31,7 +31,7 @@ const BlogItem = ({ item }) => {
               : description}
           </p>
 
-          <Link to={`/blogs/${title}`} className="read__more">
+          <Link to={`/blogs/${title}/details`} className="read__more">
             Read More
           </Link>
 

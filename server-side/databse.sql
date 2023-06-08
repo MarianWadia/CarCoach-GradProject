@@ -1,5 +1,6 @@
 CREATE DATABASE IF NOT EXISTS carcoach;
 
+-- TODO: add is_tutor and is_admin in the users table and i think is_student and phone also
 -- *DONE*
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   reset_token_expires_at TIMESTAMP WITH TIME ZONE DEFAULT NULL
 );
 
+-- TODO: add rating in the tutors_applicants table
 -- *DONE*
 CREATE TABLE IF NOT EXISTS tutors_applicants (
   id SERIAL PRIMARY KEY,
@@ -33,7 +35,7 @@ CREATE TABLE IF NOT EXISTS tutors_applicants (
   bio TEXT NOT NULL
 );
 
--- *will not be Created yet
+-- *will not be Created 
 -- CREATE TABLE IF NOT EXISTS tutor_cars (
 --   id SERIAL PRIMARY KEY,
 --   tutor_id INTEGER REFERENCES tutors_applicants(id),
@@ -59,6 +61,11 @@ CREATE TABLE IF NOT EXISTS car_uploads (
   available BOOLEAN NOT NULL DEFAULT TRUE,
   owner_id INTEGER REFERENCES users(id),
   usage VARCHAR(255) NOT NULL CHECK (usage IN ('coaching', 'renting')),
+  hour_price INTEGER NOT NULL,
+  hour_speed INTEGER NOT NULL,
+  details TEXT,
+  rating INTEGER,
+  available_from DATE,
   is_tutor BOOLEAN NOT NULL DEFAULT FALSE
 );
 

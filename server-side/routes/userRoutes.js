@@ -37,33 +37,13 @@ router.post('/signup', async (req, res) => {
       }
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
       const updateToken = await pool.query('UPDATE users SET token = $1 WHERE id = $2', [token, user.id]);
-      res.json({ token });
+      res.json({ token, id: user.id });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'An error occurred' });
     }
   });
-
-
-  // signOut the user and verify its token if valid
-    // function verifyToken(req, res, next) {
-    //   const token = req.headers['authorization'];
-    
-    //   if (!token) {
-    //     return res.status(401).send('Unauthorized request');
-    //   }
-    
-    //   try {
-    //     const decoded = jwt.verify(token, process.env.JWT_SECRET, { ignoreExpiration: true });
-    //     req.user = decoded;
-    //     console.log(process.env.JWT_SECRET);
-    //     console.log(decoded)
-    //     next();
-    //   } catch (error) {
-    //     console.log(token)
-    //     return res.status(401).json({ error: 'Invalid token', message: error.message });
-    //   }
-    // }
+  
     function verifyToken(req, res, next) {
       
       const token = req.headers.authorization.replace('Bearer ', '');
@@ -72,19 +52,17 @@ router.post('/signup', async (req, res) => {
         return res.status(401).send('Unauthorized request');
       }
       
-      console.log('Before jwt.verify()');
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.id;
         next();
       } catch (error) {
-        console.log(error)
         return res.status(401).json({ error: 'Invalid token', message: error.message });
       }
-      console.log('After jwt.verify()');
     }
     router.post('/signout', verifyToken, (req, res) =>{
       res.status(200).send('User signed out successfully');
+      // res.redirect('http://localhost:3000/signin');
     })
 
 

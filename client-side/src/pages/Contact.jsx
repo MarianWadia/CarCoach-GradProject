@@ -95,8 +95,8 @@ const Contact = () => {
                 <FormGroup className="contact__form">
                   <textarea
                     rows="5"
-                    placeholder="Message"
-                    className="textarea"
+                    placeholder="Your Message Here..."
+                    className="textarea textarea__contact"
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
                   ></textarea>

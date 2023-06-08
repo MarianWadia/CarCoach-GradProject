@@ -18,6 +18,9 @@
     border-radius: 4px;
   }
   
+  .textarea{
+    width: 97%;
+  }
   .time__picker::before {
     content: "Journey Time";
     color: #7c8a97;
@@ -25,7 +28,7 @@
   }
 
   .time__picker__earn::before {
-    content: "Pickup Time";
+    content: "Available From";
     color: #7c8a97;
     margin-right: 0.5rem;
   }

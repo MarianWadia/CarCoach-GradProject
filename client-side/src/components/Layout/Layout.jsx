@@ -21,15 +21,33 @@ const Layout = () => {
       
     )
   }else{
-    return (
-      <>
-        <Header />
-        <div>
-            <Routers />
-        </div>
-        <Footer />
-      </>
-      )
+    const pathname = window.location.pathname;
+    const paramRegex = /^\/\w+(\/\w+)*\/(\d+)$/;
+    const match = pathname.match(paramRegex);
+    const id = match && match[2];
+    console.log(id);
+    if(id){
+      return (
+        <>
+          <Header signed={true} id={id}/>
+          <div>
+              <Routers />
+          </div>
+          <Footer />
+        </>
+        )
+    }else{
+      return (
+        <>
+          <Header signed={false} />
+          <div>
+              <Routers />
+          </div>
+          <Footer />
+        </>
+        )
+    }
+   
   }
 }
 

@@ -37,11 +37,11 @@ const TutorItem = (props) => {
         </div>
 
         <button className=" w-50 car__item-btn car__btn-rent">
-          <Link to={`/tutors/${name}`}>Reserve</Link>
+          <Link to={`/tutors/${name}/details`}>Reserve</Link>
         </button>
 
         <button className=" w-50 car__item-btn car__btn-details">
-          <Link to={`/tutors/${name}`}>Details</Link>
+          <Link to={`/tutors/${name}/details`}>Details</Link>
         </button>
       </div>
     </div>

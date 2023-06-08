@@ -15,6 +15,9 @@
     border-radius: 5px;
   }
   
+  .textarea__contact{
+    width: 100%;
+  }
   @media only screen and (max-width: 768px) {
     .contact__btn {
       margin-bottom: 40px;

@@ -16,21 +16,21 @@ const BookingForm = ({service}) => {
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
           <input type="text" required placeholder="First Name" />
         </FormGroup>
-        <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+        <FormGroup className="booking__form d-inline-block mb-4">
           <input type="text" required placeholder="Last Name" />
         </FormGroup>
 
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
           <input type="email" required placeholder="Email" />
         </FormGroup>
-        <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+        <FormGroup className="booking__form d-inline-block mb-4">
           <input type="number" required placeholder="Phone Number" />
         </FormGroup>
 
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
           <input type="text" required placeholder="From Address" />
         </FormGroup>
-        <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+        <FormGroup className="booking__form d-inline-block mb-4">
           <input type="text" required placeholder="To Address" />
         </FormGroup>
 
@@ -43,7 +43,7 @@ const BookingForm = ({service}) => {
             <option value="5+ person">5+ Person</option>
           </select>
         </FormGroup>
-        <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+        <FormGroup className="booking__form d-inline-block mb-4">
           <select name="" id="">
             <option value="1 luggage">1 luggage</option>
             <option value="2 luggage">2 luggage</option>
@@ -56,7 +56,7 @@ const BookingForm = ({service}) => {
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
           <input type="date" required placeholder="Journey Date" />
         </FormGroup>
-        <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+        <FormGroup className="booking__form d-inline-block mb-4">
           <input
             type="time"
             required placeholder="Journey Time"
@@ -81,41 +81,43 @@ const BookingForm = ({service}) => {
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
             <input type="text" required placeholder="First Name" />
           </FormGroup>
-          <FormGroup className="booking__form d-inline-block ms-1 mb-4">
-            <input type="text" required placeholder="Last Name" />
+
+          <FormGroup className="booking__form d-inline-block mb-4">
+            <input type="number" required placeholder="Phone Number" />
           </FormGroup>
 
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
             <input type="email" required placeholder="Email" />
           </FormGroup>
-          <FormGroup className="booking__form d-inline-block ms-1 mb-4">
-            <input type="number" required placeholder="Phone Number" />
-          </FormGroup>
+
+          <FormGroup className="booking__form d-inline-block mb-4">
+            <input type="text" required placeholder="Your Address" />
+          </FormGroup>         
 
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="text" required placeholder="Your Address" />
+            <input type="number" required placeholder="Speed Per Hour" />
           </FormGroup>
           
-          <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+          <FormGroup className="booking__form d-inline-block mb-4">
             <input type="text" required placeholder="Pickup Location" />
           </FormGroup>
 
-          <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+        <FormGroup className="booking__form d-inline-block me-4 mb-4">
             <input type="text" required placeholder="Car Model" />
           </FormGroup>
 
-          <FormGroup className="booking__form  d-inline-block ms-4 mb-4">
+          <FormGroup className="booking__form  d-inline-block mb-4">
             <input type="file" required placeholder="Upload you car image" className="upload__image__earn" />
           </FormGroup>
 
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
             <select name="" id="">
-              <option value="for rent">For Renting</option>
-              <option value="for driving">For Driving Services</option>
+              <option value="renting">For Renting</option>
+              <option value="coaching">For Driving Services</option>
             </select>
           </FormGroup>
           
-          <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+          <FormGroup className="booking__form d-inline-block mb-4">
             <select name="" id="">
               <option value="automatic">Automatic Car</option>
               <option value="manual">Manual Car</option>
@@ -123,14 +125,13 @@ const BookingForm = ({service}) => {
           </FormGroup>
 
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="date" required placeholder="Pickup Date" />
+            <input type="date" required className="time__picker__earn" />
           </FormGroup>
 
-          <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+          <FormGroup className="booking__form d-inline-block mb-4">
             <input
-              type="time"
-              required placeholder="Pickup Time"
-              className="time__picker__earn"
+              type="number"
+              required placeholder="Price Per Hour"
             />
           </FormGroup>
 
@@ -157,7 +158,7 @@ const BookingForm = ({service}) => {
                 <input type="text" required placeholder="First Name" />
               </FormGroup>
 
-              <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+              <FormGroup className="booking__form d-inline-block mb-4">
                 <input type="text" required placeholder="Last Name" />
               </FormGroup>
 
@@ -165,7 +166,7 @@ const BookingForm = ({service}) => {
                 <input type="number" required placeholder="Your Age" />
               </FormGroup>
 
-              <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+              <FormGroup className="booking__form d-inline-block mb-4">
                 <input type="text" required placeholder="Your Gender" />
               </FormGroup>
 
@@ -173,7 +174,7 @@ const BookingForm = ({service}) => {
                 <input type="email" required placeholder="Email" />
               </FormGroup>
 
-              <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+              <FormGroup className="booking__form d-inline-block mb-4">
                 <input type="tel" required placeholder="Phone Number" />
               </FormGroup>
 
@@ -181,7 +182,7 @@ const BookingForm = ({service}) => {
                 <input type="text" required placeholder="Your Address" />
               </FormGroup>
 
-              <FormGroup className="booking__form  d-inline-block ms-1 mb-4">
+              <FormGroup className="booking__form  d-inline-block mb-4">
                 <input type="number" required placeholder="Years of Experience" />
               </FormGroup>
 
@@ -189,7 +190,7 @@ const BookingForm = ({service}) => {
                 <input type="file" required placeholder="Upload you car image" className="upload__image__tutor" />
               </FormGroup>
 
-              <FormGroup className="booking__form  d-inline-block ms-1 mb-4">
+              <FormGroup className="booking__form  d-inline-block mb-4">
                 <input type="file" required placeholder="Upload you car image" className="upload__image__doc1" />
               </FormGroup>
 
@@ -201,7 +202,7 @@ const BookingForm = ({service}) => {
                 />
               </FormGroup>
 
-              <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+              <FormGroup className="booking__form d-inline-block mb-4">
                 <input type="date" required placeholder="Pickup Date" />
               </FormGroup>
               
@@ -210,7 +211,7 @@ const BookingForm = ({service}) => {
                 <input type="text" required placeholder="working Location" />
               </FormGroup>
 
-              <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+              <FormGroup className="booking__form d-inline-block mb-4">
                 <select name="" id="" placeholder="Have a car">
                   <option value="">Have A car</option>
                   <option value="yes">Yes</option>
@@ -245,11 +246,11 @@ const BookingForm = ({service}) => {
           <div>
             <Form onSubmit={submitHandler}>
 
-            <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+            <FormGroup className="booking__form d-inline-block me-4 mb-4">
               <input type="text" required placeholder="Car Model" />
             </FormGroup>
 
-            <FormGroup className="booking__form  d-inline-block ms-4 mb-4">
+            <FormGroup className="booking__form  d-inline-block mb-4">
               <input type="file" required placeholder="Upload you car image" className="upload__image__earn" />
             </FormGroup>
 
@@ -257,7 +258,7 @@ const BookingForm = ({service}) => {
               <input type="text" required placeholder="Car color" />
             </FormGroup>
             
-            <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+            <FormGroup className="booking__form d-inline-block mb-4">
               <select name="" id="">
                 <option value="automatic">Automatic Car</option>
                 <option value="manual">Manual Car</option>
@@ -268,10 +269,21 @@ const BookingForm = ({service}) => {
               <input type="text" required placeholder="License plate" />
             </FormGroup>
 
-            <FormGroup className="booking__form d-inline-block ms-1 mb-4">
+            <FormGroup className="booking__form d-inline-block mb-4">
               <input
                 type="text"
                 required placeholder="Year Model"
+              />
+            </FormGroup>
+
+            <FormGroup className="booking__form d-inline-block me-4 mb-4">
+            <input type="number" required placeholder="Speed Per Hour" />
+          </FormGroup>
+
+            <FormGroup className="booking__form d-inline-block mb-4">
+              <input
+                type="number"
+                required placeholder="price per hour"
               />
             </FormGroup>
 
