@@ -4,39 +4,106 @@ import { Form, FormGroup } from "reactstrap";
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import axios from "axios"
+import swal from "sweetalert"
+
 
 const BookingForm = ({service}) => {
   const [userId, setUserId] = useState(useParams().id)
   const [responseObject, setResponseObject] = useState({});
-  // const [tutorId, setTutorId] = useState(0)
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
 
+
+  useEffect(() => {
+    if (success) {
+      const tutorMessage = responseObject?.message;
+      swal({
+        title: "Thank you for Joining Us!",
+        text: tutorMessage,
+        icon: "success",
+        button: "Done",
+      });
+      if(responseObject.redirectionLink){
+        setTimeout(() => {
+          window.location=responseObject.redirectionLink;
+        }, 3000);
+        
+      }
+    }
+  }, [success, responseObject]);
+
+  useEffect(() => {
+    if (error) {
+      swal({
+        title: "Try Again later",
+        text: "An error occurred. Please try again later!",
+        icon: "error",
+        button: "close",
+      });
+    }
+  }, [error]);
 
   const submitTutorHandler = useCallback(async (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
-    
-    const response = await axios.post(`http://localhost:8080/api/tutors-applicants/${userId}`, data);
-    const responseData  = await response.data;
-    setResponseObject(responseData);
-    console.log(responseObject);
-    window.location=responseData.redirectionLink;
-    // setTutorId(responseObject.tutorId);
+    try {
+      const data = new FormData(event.target);
+      const response = await axios.post(`http://localhost:8080/api/tutors-applicants/${userId}`, data);
+      const responseData  = await response.data;
+      setResponseObject(responseData);
+      console.log(responseObject);
+      // const tutorMessage = responseObject?.message;
+      setSuccess(true);
+    } catch (error) {
+      console.error(error);
+      setError('An error occurred. Please try again later.');
+    }
   },[])
-  const tutorMessage = responseObject?.message;
-  // const tutorId = responseObject?.tutorId;
+
+  useEffect(() => {
+    if (success) {
+      const tutorCarMessage = responseObject?.message;
+      swal({
+        title: "Thank you for Joining Us!",
+        text: tutorCarMessage,
+        icon: "success",
+        button: "Done",
+      });
+      setTimeout(() => {
+        window.location.href = `/home/${userId}`
+      }, 3000);
+    }
+  }, [success, responseObject]);
+  
+  useEffect(() => {
+    if (error) {
+      swal({
+        title: "Try Again later",
+        text: "An error occurred. Please try again later!",
+        icon: "error",
+        button: "close",
+      });
+    }
+  }, [error]);
+
 
   const {tutorId} = useParams();
   const submitTutorCarHandler = useCallback(async(event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
-    
-    const response = await axios.post(`http://localhost:8080/api/tutors-applicants/car/${tutorId}`, data);
-    const responseData  = await response.data;
-    setResponseObject(responseData);
-    console.log(responseObject);
+    try {
+      const data = new FormData(event.target);
+      const response = await axios.post(`http://localhost:8080/api/tutors-applicants/car/${tutorId}`, data);
+      const responseData  = await response.data;
+      setResponseObject(responseData);
+      console.log(responseObject);
+      setSuccess(true);
+  }catch (error) {
+      console.error(error);
+      setError('An error occurred. Please try again later.');
+    }
   }, [tutorId])
-  const tutorCarMessage = responseObject?.message;
+   
+    
 
   if(service==="book"){
    return (
@@ -264,7 +331,7 @@ const BookingForm = ({service}) => {
                   name="bio"
                 ></textarea>
               </FormGroup>
-              {tutorMessage && <p>{tutorMessage}</p>}
+              {/* {tutorMessage && <p>{tutorMessage}</p>} */}
               <button className="contact__btn" type="submit">
                   Apply Now
               </button>
@@ -336,7 +403,7 @@ const BookingForm = ({service}) => {
                 name="details"
               ></textarea>
             </FormGroup>
-            {tutorCarMessage && <p>{tutorCarMessage}</p>}
+            {/* {tutorCarMessage && <p>{tutorCarMessage}</p>} */}
             <button className="contact__btn" type="submit">
                 Upload Car
             </button>

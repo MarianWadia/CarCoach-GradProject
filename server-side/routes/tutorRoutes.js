@@ -76,7 +76,7 @@ router.post('/tutors-applicants/:id', upload.fields([
                   bio
                 ]);
              tutorId = result.rows[0].id;
-             res.status(201).json({tutorId: tutorId, message: "Thank you! We Will contact You Soon!"});
+             res.status(201).json({tutorId: tutorId, message: "Successfully uploaded! We Will contact You Soon!"});
         }
     } catch (err) {
       console.error(err);
@@ -104,7 +104,7 @@ router.post('/tutors-applicants/car/:tutorId', upload.single('car_image'), async
             hour_speed,
             details
         ]);
-        res.status(201).json({message: "Uploaded successfully, Thank you! We Will contact You Soon!"})
+        res.status(201).json({message: "Uploaded successfully, We Will contact You Soon!"})
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'An error occurred' });
