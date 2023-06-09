@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS tutors_applicants (
   user_id INTEGER REFERENCES users(id),
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
   phone VARCHAR(20),
   age INTEGER NOT NULL,
   gender VARCHAR(20) NOT NULL,
@@ -32,7 +33,8 @@ CREATE TABLE IF NOT EXISTS tutors_applicants (
   working_location VARCHAR(255) NOT NULL,
   interview_time TIME NOT NULL,
   interview_date DATE NOT NULL,
-  bio TEXT NOT NULL
+  bio TEXT NOT NULL,
+  rating INTEGER
 );
 
 -- *will not be Created 
@@ -66,7 +68,9 @@ CREATE TABLE IF NOT EXISTS car_uploads (
   details TEXT,
   rating INTEGER,
   available_from DATE,
-  is_tutor BOOLEAN NOT NULL DEFAULT FALSE
+  is_tutor BOOLEAN NOT NULL DEFAULT FALSE,
+  from_address VARCHAR(255),
+  to_address VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS students (

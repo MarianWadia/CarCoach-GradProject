@@ -21,14 +21,14 @@ const storage = multer.diskStorage({
   })
   const upload = multer({ storage: storage });
 
-  router.post('/car_uploads/:id', upload.single('car_image'), async (req, res) => {
+  router.post('/car-uploads/:id', upload.single('car_image'), async (req, res) => {
     try {
         const user_id = req.params.id;
-        const{ motor_type, color, model, year, license_plate, hour_price, hour_speed, details, available_from, usage} = req.body;
+        const{ motor_type, color, model, year, license_plate, hour_price, hour_speed, details, available_from, usage, from_address, to_address} = req.body;
         const car_image_file = req.file("car_image").path;
         const fileName = path.basename(car_image_file);
         const car_image = `http://localhost:8080/api/car-image/${fileName}`
-        const carInsert = await pool.query(`INSERT INTO car_uploads (owner_id, motor_type, color, model, year, license_plate, car_image, hour_price, hour_speed, details, available_from, usage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`, [
+        const carInsert = await pool.query(`INSERT INTO car_uploads (owner_id, motor_type, color, model, year, license_plate, car_image, hour_price, hour_speed, details, available_from, usage, from_address, to_address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING id`, [
             user_id,
             motor_type, 
             color,
@@ -40,7 +40,9 @@ const storage = multer.diskStorage({
             hour_speed,
             details,
             available_from,
-            usage
+            usage,
+            from_address, 
+            to_address
         ]);
         res.status(201).json("Car Data Uploaded successfully!")
     }catch (err) {
@@ -50,7 +52,7 @@ const storage = multer.diskStorage({
   })
 
 
-  router.get("/car_uploads", async (req, res)=>{
+  router.get("/car-uploads", async (req, res)=>{
     try {
         const result = await pool.query('SELECT * FROM tutors_applicants WHERE available=true');
         const response = result.rows;
@@ -61,7 +63,7 @@ const storage = multer.diskStorage({
     }
 })
 
-  router.get("/car_uploads/:id", async (req, res)=>{
+  router.get("/car-uploads/:id", async (req, res)=>{
     try {
         const car_id= req.params.id;
         const result = await pool.query('SELECT * FROM car_uploads WHERE id = ($1)', [car_id]);

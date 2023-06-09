@@ -41,8 +41,8 @@ const Routers = () => {
         <Route exact path='/blogs/:slug/details' element={<BlogDetails/>} />
         <Route exact path='/join-us' element={<JoinUs/>} />
         <Route exact path='/join-us/:id' element={<JoinUs/>} />
-        <Route exact path='/upload-car' element={<UploadTutorCar/>} />
-        <Route exact path='/upload-car/:id' element={<UploadTutorCar/>} />
+        <Route exact path='/join-us/upload-car' element={<UploadTutorCar/>} />
+        <Route exact path='/join-us/:id/upload-car/:tutorId' element={<UploadTutorCar/>} />
         <Route exact path='*' element={<NotFound/>} />
     </Routes>
   )
