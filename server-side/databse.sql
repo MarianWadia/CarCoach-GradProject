@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS carcoach;
 
--- TODO: add is_tutor and is_admin in the users table and i think is_student and phone also
+--TODO: add phone number column and add default for is_tutor,is_admin and is_student to be false
 -- *DONE*
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
@@ -10,10 +10,12 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255) NOT NULL,
   token VARCHAR(255) UNIQUE NOT NULL,
   reset_token VARCHAR(255) DEFAULT NULL,
-  reset_token_expires_at TIMESTAMP WITH TIME ZONE DEFAULT NULL
+  reset_token_expires_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+  is_tutor BOOLEAN,
+  is_student BOOLEAN,
+  is_admin BOOLEAN,
 );
 
--- TODO: add rating in the tutors_applicants table
 -- *DONE*
 CREATE TABLE IF NOT EXISTS tutors_applicants (
   id SERIAL PRIMARY KEY,
@@ -37,23 +39,11 @@ CREATE TABLE IF NOT EXISTS tutors_applicants (
   rating INTEGER
 );
 
--- *will not be Created 
--- CREATE TABLE IF NOT EXISTS tutor_cars (
---   id SERIAL PRIMARY KEY,
---   tutor_id INTEGER REFERENCES tutors_applicants(id),
---   -- motor_type ENUM('manual', 'automatic') NOT NULL,
---   -- model VARCHAR(255) NOT NULL,
---   -- year INTEGER NOT NULL,
---   -- color VARCHAR(255),
---   -- license_plate VARCHAR(20) UNIQUE NOT NULL,
---   car_image VARCHAR(255) NOT NULL,
---   car_id INTEGER REFERENCES car_uploads(id),
---   usage VARCHAR(255) DEFAULT 'coaching' NOT NULL,
--- )
-
+-- *DONE*
 CREATE TABLE IF NOT EXISTS car_uploads (
   id SERIAL PRIMARY KEY,
   tutor_id INTEGER REFERENCES tutors_applicants(id),
+  owner_id INTEGER REFERENCES users(id),
   motor_type VARCHAR(255) NOT NULL CHECK (motor_type IN ('manual', 'automatic')),
   model VARCHAR(255) NOT NULL,
   year INTEGER NOT NULL,
@@ -61,7 +51,6 @@ CREATE TABLE IF NOT EXISTS car_uploads (
   license_plate VARCHAR(20) UNIQUE NOT NULL,
   car_image VARCHAR(255) NOT NULL,
   available BOOLEAN NOT NULL DEFAULT TRUE,
-  owner_id INTEGER REFERENCES users(id),
   usage VARCHAR(255) NOT NULL CHECK (usage IN ('coaching', 'renting')),
   hour_price INTEGER NOT NULL,
   hour_speed INTEGER NOT NULL,
@@ -73,55 +62,60 @@ CREATE TABLE IF NOT EXISTS car_uploads (
   to_address VARCHAR(255)
 );
 
+-- *DONE*
+CREATE TABLE IF NOT EXISTS tutor_reservations (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  tutor_id INTEGER REFERENCES tutors_applicants(id),
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  email VARCHAR(255) NOT NULL,
+  payment_method VARCHAR(255) NOT NULL,
+  reservation_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  package_price VARCHAR(255) NOT NULL
+);
+
+-- *DONE*
 CREATE TABLE IF NOT EXISTS students (
+  id SERIAL PRIMARY KEY,
+  reservation_id INTEGER REFERENCES tutor_reservations(id),
+  status VARCHAR(255) NOT NULL DEFAULT('active'),
+  left_sessions INTEGER NOT NULL DEFAULT(12),
+  final_evaluation VARCHAR(255) NOT NULL DEFAULT('pending till finishing sessions')
+);
+
+CREATE TABLE IF NOT EXISTS sessions (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER REFERENCES students(id),
+  admin_id INTEGER REFERENCES users(id),
+  start_time TIME NOT NULL,
+  location TEXT,
+  feedback VARCHAR(255) DEFAULT('pending till session end'),
+  session_date DATE NOT NULL,
+  session_duration VARCHAR(10) NOT NULL
+);
+
+-- *DONE*
+CREATE TABLE IF NOT EXISTS renters (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
   name VARCHAR(255) NOT NULL,
   phone VARCHAR(20),
-  address TEXT
+  email VARCHAR(255) NOT NULL,
+  address TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS tutor_reservations (
+-- *DONE*
+CREATE TABLE IF NOT EXISTS rental_reservations (
   id SERIAL PRIMARY KEY,
-  student_id INTEGER REFERENCES students(id),
-  tutor_id INTEGER REFERENCES tutors(id),
-  start_time TIMESTAMP WITH TIME ZONE NOT NULL,
-  end_time TIMESTAMP WITH TIME ZONE NOT NULL,
-  location TEXT,
-  status VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS reservation_payments (
-  id SERIAL PRIMARY KEY,
-  reservation_id INTEGER REFERENCES tutor_reservations(id),
-  amount NUMERIC NOT NULL,
-  payment_time TIMESTAMP WITH TIME ZONE NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS tutor_payments (
-  id SERIAL PRIMARY KEY,
-  tutor_id INTEGER REFERENCES tutors(id),
-  amount NUMERIC NOT NULL,
-  payment_time TIMESTAMP WITH TIME ZONE NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS rentals (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id),
-  reservation_id INTEGER REFERENCES tutor_reservations(id),
-  car_id INTEGER REFERENCES cars(id),
-  start_time TIMESTAMP WITH TIME ZONE NOT NULL,
-  end_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  car_id INTEGER REFERENCES car_uploads(id),
+  renter_id INTEGER REFERENCES renters(id),
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
   pickup_location TEXT,
   return_location TEXT,
-  status VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS rental_payments (
-  id SERIAL PRIMARY KEY,
-  rental_id INTEGER REFERENCES rentals(id),
-  amount NUMERIC NOT NULL,
-  payment_time TIMESTAMP WITH TIME ZONE NOT NULL
+  payment_method VARCHAR(255) NOT NULL,
+  reservation_time TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 -- *DONE*
@@ -130,6 +124,7 @@ CREATE TABLE IF NOT EXISTS contacts (
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   message TEXT NOT NULL,
-  message_timestamp TIMESTAMP WITH TIME ZONE NOT NULL
+  message_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
+  user_id INTEGER REFERENCES users(id)
 );
 

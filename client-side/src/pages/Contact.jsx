@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Container, Row, Col, Form, FormGroup, Input, Button } from "reactstrap";
 import DocumentTitle from "../components/DocumentTitle/DocumentTitle.js";
 import CommonSection from "../components/UI/CommonSection";
@@ -31,39 +31,32 @@ const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [error, setError] = useState(null);
+  const [response, setRespone] = useState({});
+  const [errorMessage, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
+  const userId = useParams().id;
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
-      const response = await axios.post('http://localhost:8080/api/contact-us', {
+      const response = await axios.post(`http://localhost:8080/api/contact-us/${userId?userId:""}`, {
         name: name,
         email: email,
         message: message
       });
-
+      const responseData  = await response.data;
+      setRespone(responseData)
       setSuccess(true);
-      if(success){
-        swal({
-          title: "Thank you for contacting us!",
-          text: "We will contact you back shortly!",
-          icon: "success",
-          button: "Done",
-        });
-        setName('');
-        setEmail('');
-        setMessage('');
-      }
-      
+      setName('');
+      setEmail('');
+      setMessage('');
     } catch (error) {
       console.error(error);
       setError('An error occurred. Please try again later.');
       if(error){
         swal({
-          title: "Try Again later",
-          text: "An error occurred. Please try again later!",
+          title: "An error occurred",
+          text: errorMessage,
           icon: "error",
           button: "close",
         });
@@ -71,11 +64,32 @@ const Contact = () => {
     }
   };
 
-
+useEffect(() => {
+  if(success){
+    if(response.doneMessage){
+      swal({
+        title: "Thank you for contacting us!",
+        text: response.doneMessage,
+        icon: "success",
+        button: "Done",
+      });
+    }
+    if(response.unauthorizedMessage){
+      swal({
+        title: "Unauthorized",
+        text: response.unauthorizedMessage,
+        icon: "error",
+        button: "close",
+      });
+    }
+  }
+}, [success, response]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+
   return (
     <DocumentTitle title="Contact">
       <CommonSection title="Contact" />

@@ -22,21 +22,28 @@ app.use((req, res, next) => {
 
 const userRoutes = require('./routes/userRoutes');
 const passwordRoutes = require('./routes/passwordRoutes');
-const contactsRouter = require('./routes/contact-us');
+const contactsRoutes = require('./routes/contact-us');
 const tutorRoutes = require('./routes/tutorRoutes');
 const carRoutes = require('./routes/carRoutes');
+const searchRoutes = require('./routes/searchRoutes');
+const reserveTutorRoutes = require('./routes/reserveTutorRoutes');
+const rentCarRoutes = require('./routes/rentCarRoutes');
+const sessionRoutes = require('./routes/sessionRoutes');
 
 
 
 
 app.use('/api/users',userRoutes);
 app.use('/api/password', passwordRoutes);
-app.use('/api',contactsRouter);
+app.use('/api',contactsRoutes);
 app.use('/api', tutorRoutes);
 app.use('/api', carRoutes)
 app.use('/api/tutor-image', express.static('upload/tutors'))
 app.use('/api/car-image', express.static('upload/cars'))
-
+app.use('/api', searchRoutes);
+app.use('/api', reserveTutorRoutes);
+app.use('/api', rentCarRoutes);
+app.use('/api', sessionRoutes)
 
 
 app.listen(port, () => {

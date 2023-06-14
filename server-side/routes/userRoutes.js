@@ -66,4 +66,15 @@ router.post('/signup', async (req, res) => {
     })
 
 
+  router.get("/", async (req, res)=>{
+    try {
+        const result = await pool.query(`SELECT * FROM users`);
+        const response = result.rows;
+        res.status(200).json(response)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
+
 module.exports = router;

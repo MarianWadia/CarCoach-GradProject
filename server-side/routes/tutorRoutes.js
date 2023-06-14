@@ -22,64 +22,69 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-router.post('/tutors-applicants/:id', upload.fields([
+router.post('/tutors-applicants/:id?', upload.fields([
     { name: 'driver_license', maxCount: 1 },
     { name: 'driver_image', maxCount: 1 }
   ]), async (req, res) => {
     try {
-        const user_id = req.params.id;
-        const {
-            first_name,
-            last_name,
-            phone,
-            email,
-            gender,
-            working_location,
-            age,
-            address,
-            is_own_car,
-            experience_years,
-            interview_time,
-            interview_date,
-            bio
-        } = req.body;
-        const driver_license = req.files['driver_license'][0].path;
-        const driver_image_file = req.files['driver_image'][0].path;
-        const fileName = path.basename(driver_image_file);
-        const driver_image = `http://localhost:8080/api/tutor-image/${fileName}`
-        let tutorId;
-        if(is_own_car === "true"){
-            const result = await pool.query(
-                `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, true) RETURNING *`, 
-                [user_id, first_name, last_name, phone, email, age, 
-                  gender, address, experience_years, 
-                  driver_license, driver_image, 
-                  working_location, interview_time, 
-                  interview_date, 
-                  bio,
-                ]);
-             tutorId = result.rows[0].id;
-            res.status(201).send({
-                tutorId: tutorId, 
-                redirectionLink:`http://localhost:3000/join-us/${user_id}/upload-car/${tutorId}`,
-                message: "Successfully uploaded"
-            })
-            console.log(tutorId);
-        }else if(is_own_car === "false"){
-            const result = await pool.query(
-                `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, false) RETURNING *`, 
-                [user_id, first_name, last_name, phone, email, age, 
-                  gender, address, experience_years, 
-                  driver_license, driver_image, 
-                  working_location, interview_time, 
-                  interview_date, 
-                  bio
-                ]);
-             tutorId = result.rows[0].id;
-             res.status(201).json({tutorId: tutorId, message: "Successfully uploaded! We Will contact You Soon!"});
+        const user_id = req.params.id || null;
+        if(user_id==null){
+            res.json({unauthorizedMessage: "You should Login First. If You Don't have an account Signup Now!"});
+        }else{
+            const {
+                first_name,
+                last_name,
+                phone,
+                email,
+                gender,
+                working_location,
+                age,
+                address,
+                is_own_car,
+                experience_years,
+                interview_time,
+                interview_date,
+                bio
+            } = req.body;
+            const driver_license = req.files['driver_license'][0].path;
+            const driver_image_file = req.files['driver_image'][0].path;
+            const fileName = path.basename(driver_image_file);
+            const driver_image = `http://localhost:8080/api/tutor-image/${fileName}`
+            let tutorId;
+            if(is_own_car === "true"){
+                const dataIsTutor = `UPDATE users SET is_tutor = true WHERE user_id =${user_id}`;
+                const result = await pool.query(
+                    `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, true) RETURNING *`, 
+                    [user_id, first_name, last_name, phone, email, age, 
+                      gender, address, experience_years, 
+                      driver_license, driver_image, 
+                      working_location, interview_time, 
+                      interview_date, 
+                      bio,
+                    ]);
+                 tutorId = result.rows[0].id;
+                res.status(201).send({
+                    tutorId: tutorId, 
+                    redirectionLink:`http://localhost:3000/join-us/${user_id}/upload-car/${tutorId}`,
+                    message: "Successfully uploaded"
+                })
+                console.log(tutorId);
+            }else if(is_own_car === "false"){
+                const result = await pool.query(
+                    `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, false) RETURNING *`, 
+                    [user_id, first_name, last_name, phone, email, age, 
+                      gender, address, experience_years, 
+                      driver_license, driver_image, 
+                      working_location, interview_time, 
+                      interview_date, 
+                      bio
+                    ]);
+                 tutorId = result.rows[0].id;
+                 res.status(201).json({tutorId: tutorId, message: "Successfully uploaded! We Will contact You Soon!"});
+            }
         }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       res.status(500).json({ message: 'An error occurred' });
     }
 })
@@ -117,11 +122,11 @@ router.get("/tutors-applicants", async (req, res)=>{
         const result = await pool.query('SELECT * FROM tutors_applicants WHERE is_accepted=true');
         const response = result.rowCount;
         if(response){
-            data = response.rows;
+            const data = result.rows;
             res.status(200).json({data: data})
         }
     } catch (error) {
-        console.error(err);
+        console.error(error);
         res.status(500).json({ message: 'An error occurred' });
     }
 })
@@ -153,7 +158,21 @@ router.get("/tutors-applicants/:id", async (req, res)=>{
             res.json("sorry you didn't get accepted");
         }
     } catch (error) {
-        console.error(err);
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+})
+
+router.get("/tutors-applicants-admins", async (req, res)=>{
+    try {
+        const result = await pool.query('SELECT * FROM tutors_applicants');
+        const response = result.rowCount;
+        if(response){
+            const data = result.rows;
+            res.status(200).json({data: data})
+        }
+    } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'An error occurred' });
     }
 })
