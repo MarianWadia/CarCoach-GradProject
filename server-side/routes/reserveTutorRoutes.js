@@ -32,6 +32,7 @@ router.post('/tutor-reserve/:id?/:tutor_id', async (req, res) => {
     }
   });
 
+// get all reservations by admin
   router.get("/tutor-reserve", async (req, res)=>{
     try {
         const result = await pool.query(`SELECT * FROM tutor_reservations`);
@@ -43,6 +44,7 @@ router.post('/tutor-reserve/:id?/:tutor_id', async (req, res) => {
     }
 })
 
+// get all students by admin
 router.get("/tutor-reserve/students", async (req, res)=>{
     try {
         const result = await pool.query(`SELECT * FROM students`);
@@ -54,5 +56,28 @@ router.get("/tutor-reserve/students", async (req, res)=>{
     }
 })
 
+  // delete tutor reservation by admin
+  router.delete("/tutor-reserve/:reservation_id", async (req, res)=>{
+    try {
+      const {reservation_id} = req.params;
+        const result = await pool.query(`DELETE FROM tutor_reservations WHERE id=${reservation_id}`);
+        res.status(200).json({message: "Deleted successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
+
+  // delete student by admin
+  router.delete("/tutor-reserve/students/:student_id", async (req, res)=>{
+    try {
+      const {student_id} = req.params;
+        const result = await pool.query(`DELETE FROM students WHERE id=${student_id}`);
+        res.status(200).json({message: "Deleted successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
 
 module.exports = router;

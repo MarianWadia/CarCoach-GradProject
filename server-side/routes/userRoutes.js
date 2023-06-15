@@ -76,5 +76,28 @@ router.post('/signup', async (req, res) => {
         res.status(500).json({ message: 'An error occurred' });
     }
   })
+  // delete user by admin
+  router.delete("/:id", async (req, res)=>{
+    try {
+      const user_id = req.params.id;
+        const result = await pool.query(`DELETE FROM users WHERE id=${user_id}`);
+        res.status(200).json({message: "Deleted successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
+  // make user an admin -- by admin
+  router.put("/:id", async (req, res)=>{
+    try {
+      const user_id = req.params.id;
+        const result = await pool.query(`UPDATE users SET is_admin = true WHERE id=${user_id}`);
+        res.status(200).json({message: "Updated Successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
+
 
 module.exports = router;

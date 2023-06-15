@@ -4,6 +4,7 @@ import Signup from "../pages/Signup"
 import {Routes, Route} from "react-router-dom"
 import ResetPassword from "../pages/ResetPassword"
 import ForgotPassword from "../pages/ForgotPassword"
+import AdminDashboard from "../pages/AdminDashboard"
 
 const SpecialRoutes = () => {
   return (
@@ -12,6 +13,7 @@ const SpecialRoutes = () => {
         <Route exact path='/signup' element={<Signup/>} />
         <Route exact path='/forgot' element={<ForgotPassword/>} />
         <Route exact path='/reset/:token' element={<ResetPassword/>} />
+        <Route exact path='/admin/:id/:name' element={<AdminDashboard />} />
     </Routes>
   )
 }

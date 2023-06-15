@@ -7,10 +7,13 @@ import SpecialRoutes from '../../routers/SpecialRoutes'
 const Layout = () => {
   // checks for a route that starts with /reset/ followed by one or more characters
   const resetRoutePattern = /^\/reset\/.+$/;
-  if (window.location.pathname === "/signin" || 
+  // checks for a route that starts with /admin/ followed by one or more characters
+  const adminRoutePattern = /\/admin\//;
+    if (window.location.pathname === "/signin" || 
       window.location.pathname === "/signup" || 
       window.location.pathname === "/forgot" || 
-      resetRoutePattern.test(window.location.pathname)
+      resetRoutePattern.test(window.location.pathname) ||
+      adminRoutePattern.test(window.location.pathname)
       ){
     return(
       <>

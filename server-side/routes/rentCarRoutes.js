@@ -55,4 +55,30 @@ router.get("/car-rent/renters", async (req, res)=>{
   }
 })
 
+  // delete renter by admin
+  router.delete("/car-rent/renters/:renter_id", async (req, res)=>{
+    try {
+      const {renter_id} = req.params;
+        const result = await pool.query(`DELETE FROM renters WHERE id=${renter_id}`);
+        res.status(200).json({message: "Deleted successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
+
+  // delete renting reservation by admin
+  router.delete("/car-rent/:rent_id", async (req, res)=>{
+    try {
+      const {rent_id} = req.params;
+        const result = await pool.query(`DELETE FROM rental_reservations WHERE id=${rent_id}`);
+        res.status(200).json({message: "Deleted successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
+
+
+
 module.exports = router;

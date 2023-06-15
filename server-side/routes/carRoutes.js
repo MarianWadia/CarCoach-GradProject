@@ -92,5 +92,17 @@ router.get("/car-uploads-admins", async (req, res)=>{
     }
 })
 
+  // delete renting reservation by admin
+  router.delete("/car-uploads-admins/:car_id", async (req, res)=>{
+    try {
+      const {car_id} = req.params;
+        const result = await pool.query(`DELETE FROM car_uploads WHERE id=${car_id}`);
+        res.status(200).json({message: "Deleted successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
+
   module.exports = router;
 

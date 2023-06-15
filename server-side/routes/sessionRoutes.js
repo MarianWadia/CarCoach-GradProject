@@ -84,6 +84,17 @@ router.post('/sessions/:id?/:student_id', async (req, res) => {
     }
   })
 
+  // delete session by admin
+  router.delete("/sessions/:session_id", async (req, res)=>{
+  try {
+    const {session_id} = req.params;
+      const result = await pool.query(`DELETE FROM sessions WHERE id=${session_id}`);
+      res.status(200).json({message: "Deleted successfully!"})
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'An error occurred' });
+  }
+})
 
 
 module.exports = router;

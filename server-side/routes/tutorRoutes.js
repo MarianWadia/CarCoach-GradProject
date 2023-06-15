@@ -52,7 +52,6 @@ router.post('/tutors-applicants/:id?', upload.fields([
             const driver_image = `http://localhost:8080/api/tutor-image/${fileName}`
             let tutorId;
             if(is_own_car === "true"){
-                const dataIsTutor = `UPDATE users SET is_tutor = true WHERE user_id =${user_id}`;
                 const result = await pool.query(
                     `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, true) RETURNING *`, 
                     [user_id, first_name, last_name, phone, email, age, 
@@ -176,5 +175,31 @@ router.get("/tutors-applicants-admins", async (req, res)=>{
         res.status(500).json({ message: 'An error occurred' });
     }
 })
+
+  // delete tutor by admin
+router.delete("/tutors-applicants-admins/:tutor_id", async (req, res)=>{
+    try {
+      const {tutor_id} = req.params;
+        const result = await pool.query(`DELETE FROM tutors_applicants WHERE id=${tutor_id}`);
+        res.status(200).json({message: "Deleted successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
+ //update tutor acceptance in tutors_applicants table and is_tutor in users table -- by admin
+  router.put("/tutors-applicants-admins/:tutor_id", async (req, res)=>{
+    try {
+        const {tutor_id} = req.params.id;
+        const update1 = await pool.query(`UPDATE tutors_applicants SET is_accepted = true WHERE id=${tutor_id}`);
+        const resultUserId = await pool.query(`SELECT user_id FROM tutors_applicants WHERE id=${tutor_id}`);
+        const {userId} = resultUserId.rows[0];
+        const update2 = await pool.query(`UPDATE users SET is_tutor = true WHERE id=${userId}`);
+        res.status(200).json({message: "Updated Successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+  })
 
 module.exports = router;
