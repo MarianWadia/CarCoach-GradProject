@@ -38,6 +38,7 @@ const Routers = () => {
         <Route exact path='/pricing' element={<Pricing />} />
         <Route exact path='/blogs/:details' element={<Blog/>} />   
         <Route exact path='/blogs/:id' element={<Blog/>} />        
+        <Route exact path='/blogs' element={<Blog/>} />        
         <Route exact path='/blogs/:slug/details' element={<BlogDetails/>} />
         <Route exact path='/join-us' element={<JoinUs/>} />
         <Route exact path='/join-us/:id' element={<JoinUs/>} />

@@ -27,11 +27,11 @@ const storage = multer.diskStorage({
         if(user_id==null){
             res.json({unauthorizedMessage: "You should Login First. If You Don't have an account Signup Now!"});
         }else{
-            const{ motor_type, color, model, year, license_plate, hour_price, hour_speed, details, available_from, usage, from_address, to_address} = req.body;
+            const{ motor_type, color, model, year, license_plate, hour_price, hour_speed, details, available_from, usage, from_address} = req.body;
             const car_image_file = req.file.path;
             const fileName = path.basename(car_image_file);
             const car_image = `http://localhost:8080/api/car-image/${fileName}`
-            const carInsert = await pool.query(`INSERT INTO car_uploads (owner_id, motor_type, color, model, year, license_plate, car_image, hour_price, hour_speed, details, available_from, usage, from_address, to_address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING id`, [
+            const carInsert = await pool.query(`INSERT INTO car_uploads (owner_id, motor_type, color, model, year, license_plate, car_image, hour_price, hour_speed, details, available_from, usage, from_address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id`, [
                 user_id,
                 motor_type, 
                 color,
@@ -44,9 +44,9 @@ const storage = multer.diskStorage({
                 details,
                 available_from,
                 usage,
-                to_address
+                from_address    
             ]);
-            res.status(201).json("Car Data Uploaded successfully!")
+            res.status(201).json({doneMessage: "Thank You. Car Data Uploaded successfully!"})
         }
     }catch (err) {
         console.error(err);

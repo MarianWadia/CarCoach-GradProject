@@ -112,7 +112,7 @@
 .menu {
     display: flex;
     align-items: center;
-    column-gap: 2.7rem;
+    column-gap: 24px;
 }
 
 .nav__item {
@@ -132,6 +132,7 @@
     align-items: center;
     border-radius: 50px;
     background: #020a4de9;
+
 }
   
 .search__box input {

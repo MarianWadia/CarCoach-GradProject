@@ -13,8 +13,7 @@ const BookingForm = ({service}) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-
-
+// ---------------------------------tutors applying with their cars uploading --------------------------------
   useEffect(() => {
     if (success) {
       const tutorMessage = responseObject?.message;
@@ -52,7 +51,6 @@ const BookingForm = ({service}) => {
       const responseData  = await response.data;
       setResponseObject(responseData);
       console.log(responseObject);
-      // const tutorMessage = responseObject?.message;
       setSuccess(true);
     } catch (error) {
       console.error(error);
@@ -104,6 +102,43 @@ const BookingForm = ({service}) => {
   }, [tutorId])
    
     
+// ---------------------------------cars upload---------------------------------
+useEffect(() => {
+  if(responseObject.doneMessage){
+    swal({
+      title: "Thank you for contacting us!",
+      text: responseObject.doneMessage,
+      icon: "success",
+      button: "Done",
+    });
+  }
+  if(responseObject.unauthorizedMessage){
+    swal({
+      title: "Unauthorized",
+      text: responseObject.unauthorizedMessage,
+      icon: "error",
+      button: "close",
+    });
+  }
+}, [success, responseObject]);
+
+
+const submitCarHandler = useCallback(async (event) => {
+  event.preventDefault();
+  try {
+    const data = new FormData(event.target);
+    const response = await axios.post(`http://localhost:8080/api/car-uploads/${userId?userId:""}`, data);
+    const responseData  = await response.data;
+    setResponseObject(responseData);
+    console.log(responseObject);
+    setSuccess(true);
+  } catch (error) {
+    console.error(error);
+    setError('An error occurred. Please try again later.');
+  }
+},[])
+
+
 
   if(service==="book"){
    return (
@@ -120,7 +155,7 @@ const BookingForm = ({service}) => {
           <input type="email" required placeholder="Email" name="email" />
         </FormGroup>
         <FormGroup className="booking__form d-inline-block mb-4">
-          <input type="number" required placeholder="Phone Number" name="phone"/>
+          <input type="tel" required placeholder="Phone Number" name="phone"/>
         </FormGroup>
 
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
@@ -175,30 +210,30 @@ const BookingForm = ({service}) => {
       )} else if(service==="earn"){
         return (
           <div>
-            <Form onSubmit={''}>
+            <Form onSubmit={submitCarHandler}>
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="text" required placeholder="First Name" name="first_name"/>
+            <input type="text" required placeholder="Name" name="name"/>
           </FormGroup>
 
           <FormGroup className="booking__form d-inline-block mb-4">
-            <input type="number" required placeholder="Phone Number" name="last_name" />
+            <input type="tel" required placeholder="Phone Number" name="phone" />
           </FormGroup>
 
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="email" required placeholder="Email" name="email"/>
+            <input type="text" required placeholder="License Plate" name="license_plate"/>
           </FormGroup>
 
           <FormGroup className="booking__form d-inline-block mb-4">
-            <input type="text" required placeholder="Your Address" name="address" />
-          </FormGroup>         
+            <input type="text" required placeholder="Pickup Location" name="from_address"/>
+          </FormGroup>
 
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
             <input type="number" required placeholder="Speed Per Hour" name="hour_speed" />
           </FormGroup>
           
           <FormGroup className="booking__form d-inline-block mb-4">
-            <input type="text" required placeholder="Pickup Location" name="from_address"/>
-          </FormGroup>
+            <input type="text" required placeholder="Car Year" name="year" />
+          </FormGroup>    
 
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
             <input type="text" required placeholder="Car Model" name="model"  />
