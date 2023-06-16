@@ -1,11 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Row, Col } from "reactstrap";
 import DocumentTitle from "../components/DocumentTitle/DocumentTitle"
 import CommonSection from '../components/UI/CommonSection'
 import TutorItem from "../components/UI/TutorItem";
-import tutorData from "../assets/data/tutorData";
+import axios from "axios"
+
+
 
 const TutorListing = () => {
+  const [data, setData] = useState(null);
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/tutors-applicants');
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  console.log(data);
+
   return (
     <DocumentTitle title="Reserver Tutor">
       <CommonSection title="Driving Tutors" />
@@ -20,15 +37,15 @@ const TutorListing = () => {
 
                 <select>
                   <option>Select</option>
-                  <option value="low">By Female</option>
-                  <option value="high">By Male</option>
+                  <option value="low">Female</option>
+                  <option value="high">Male</option>
                 </select>
               </div>
-            </Col>
+            </Col> 
 
-            {tutorData.map((item) => (
+            {data?data.map((item) => (
               <TutorItem item={item} key={item.id} />
-            ))}
+            )):(<p>Loading data...</p>)}
           </Row>
         </Container>
       </section>

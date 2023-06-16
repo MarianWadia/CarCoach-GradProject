@@ -2,12 +2,13 @@
     border: 1px solid #7c8a9736;
     padding: 20px;
     border-radius: 5px;
+    height: 450px;
   }
 
   .car__item__img{
     overflow: hidden;
     background-size: cover;
-    max-height: 220px;
+    height: 200px; 
   }
   
   .car__item-info span i {

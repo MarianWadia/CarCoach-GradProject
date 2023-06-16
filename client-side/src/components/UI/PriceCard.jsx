@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 const PriceCard = () => {
     return (
       <>
-        <div className='content flex mtop'>
+        <div className='content flex__price mtop'>
         {price.map((item, index) => (
           <div className='box shadow' key={index}>
             <div className='topbtn'>

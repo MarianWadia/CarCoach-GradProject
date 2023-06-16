@@ -24,28 +24,40 @@ router.post('/sessions/:id?/:student_id', async (req, res) => {
     }
   });
 
-  router.get("/sessions-students/:student_id?", async (req, res)=>{
-    const {student_id} = req.params || null;
+  router.get("/sessions-students/:user_id?", async (req, res)=>{
+    const {user_id} = req.params || null;
     try {
-        if(student_id==null){
+        if(user_id==null){
             res.json({unauthorizedMessage: "You should Login First. If You Don't have an account Signup Now!"});
         }else{
-            const studentTutor = await pool.query(`SELECT ta.first_name, ta.last_name
-            FROM tutors_applicants ta
-            JOIN tutor_reservations tr ON ta.id = tr.tutor_id
-            JOIN students st ON tr.id = st.reservation_id
-            JOIN sessions s ON st.id = s.student_id
-            WHERE st.id = ${student_id}`);
-            const {first_name, last_name} = studentTutor.rows[0];
-            const upcomingSession = await pool.query(`SELECT session_date, session_duration, start_time, location
-            FROM sessions WHERE student_id = ${student_id}`);
-            const sessionDetails = upcomingSession.rows[0];
-            const data = await pool.query(`SELECT left_sessions FROM students WHERE id = ${student_id}`);
-            const {left_sessions} = data.rows[0]
-            res.status(200).json({
-                tutorName: `${first_name} ${last_name}`,
-                sessionsDetails: {sessionDetails, left_sessions}
-            })
+            const getReservationId = await pool.query(`SELECT id FROM tutor_reservations WHERE user_id = ${user_id}`);
+            if(getReservationId.rowCount>0){
+              const reservation_id = getReservationId.rows[0].id;
+              const getStudentId = await pool.query(`SELECT id FROM students WHERE reservation_id = ${reservation_id}`);
+              if(getStudentId.rowCount>0){
+                const student_id = getStudentId.rows[0].id;
+                const studentTutor = await pool.query(`SELECT ta.first_name, ta.last_name
+                FROM tutors_applicants ta
+                JOIN tutor_reservations tr ON ta.id = tr.tutor_id
+                JOIN students st ON tr.id = st.reservation_id
+                JOIN sessions s ON st.id = s.student_id
+                WHERE st.id = ${student_id}`);
+                const {first_name, last_name} = studentTutor.rows[0];
+                const upcomingSession = await pool.query(`SELECT session_date, session_duration, start_time, location
+                FROM sessions WHERE student_id = ${student_id}`);
+                const sessionDetails = upcomingSession.rows[0];
+                const data = await pool.query(`SELECT left_sessions FROM students WHERE id = ${student_id}`);
+                const {left_sessions} = data.rows[0]
+                res.status(200).json({
+                    tutorName: `${first_name} ${last_name}`,
+                    sessionsDetails: {sessionDetails, left_sessions}
+                })
+              }else{
+                res.status(404).json({message: "Not Found"})
+              }
+            }else{
+              res.status(404).json({message: "Not Found"})
+            }
         }
     } catch (error) {
         console.error(error);
@@ -53,12 +65,14 @@ router.post('/sessions/:id?/:student_id', async (req, res) => {
     }
   })
 
-  router.get("/sessions-tutors/:tutor_id?", async (req, res)=>{
-    const {tutor_id} = req.params || null;
+  router.get("/sessions-tutors/:user_id?", async (req, res)=>{
+    const {user_id} = req.params || null;
     try {
-        if(tutor_id==null){
+        if(user_id==null){
             res.json({unauthorizedMessage: "You should Login First. If You Don't have an account Signup Now!"});
         }else{
+            const getTutorId = await pool.query(`SELECT id FROM tutors_applicants WHERE user_id = ${user_id}`);
+            const tutor_id = getTutorId.rows[0].id;
             const response = await pool.query(`SELECT tr.name, tr.phone, tr.email, st.status, st.left_sessions, s.start_time, 
             s.location, s.session_date, s.session_duration 
             FROM tutor_reservations tr

@@ -55,11 +55,11 @@ const Signup = () => {
           
           <h5 className='login__with'>or Signup with</h5>
           <hr className='horizontal__line' />
-          <div className="icons__container">
+          {/* <div className="icons__container">
             <span className='icon icon-1'><FaFacebook/></span>
             <span className='icon icon-2'><FaInstagram/></span>
             <span className='icon icon-3'><FaTwitter /></span>
-          </div>
+          </div> */}
           <Link to="/signin" className='signup__content'>
             <h5 >Already have an account? signin</h5>
           </Link>

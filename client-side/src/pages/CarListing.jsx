@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Row, Col } from "reactstrap";
 import DocumentTitle from "../components/DocumentTitle/DocumentTitle"
 import CommonSection from '../components/UI/CommonSection'
 import CarItem from "../components/UI/CarItem";
 import carData from "../assets/data/carData";
+import axios from 'axios';
 
 const CarListing = () => {
+  const [data, setData] = useState(null);
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/car-uploads');
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <DocumentTitle title="Renting cars">
       <CommonSection title="Cars for Renting" />
@@ -26,9 +40,9 @@ const CarListing = () => {
               </div>
             </Col>
 
-            {carData.map((item) => (
+            {data?data.map((item) => (
               <CarItem item={item} key={item.id} />
-            ))}
+            )):(<p>Loading data...</p>)}
           </Row>
         </Container>
       </section>

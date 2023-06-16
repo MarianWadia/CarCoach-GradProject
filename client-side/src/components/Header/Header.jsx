@@ -81,7 +81,7 @@ const Header = ({signed, id}) => {
               </div>
               ):(
                 <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-                  <Link onClick={() => handleClick("signin")} className='d-flex align-items-center gap-1'>
+                  <Link onClick={() => handleClick(`profile/${id}`)} className='d-flex align-items-center gap-1'>
                     <AiOutlineUser color='black' size={21}/>
                     <span>Profile</span>
                   </Link>

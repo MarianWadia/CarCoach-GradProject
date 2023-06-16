@@ -14,6 +14,7 @@ import UploadCar from "../pages/UploadCar"
 import UploadTutorCar from "../pages/UploadTutorCar"
 import JoinUs from "../pages/JoinUs"
 import Pricing from '../pages/Pricing'
+import Profile from '../pages/Profile'
 
 
 const Routers = () => {
@@ -22,14 +23,15 @@ const Routers = () => {
         <Route exact path='/' element={<Navigate to="/home" />} />
         <Route exact path='/home' element={<Home/>} />
         <Route exact path='/home/:id' element={<Home/>} />
+        <Route exact path='/profile/:id' element={<Profile/>} />
         <Route exact path='/about' element={<About/>} />
         <Route exact path='/about/:id' element={<About/>} />
         <Route exact path='/cars' element={<CarListing/>} />
         <Route exact path='/cars/:id' element={<CarListing/>} />
-        <Route exact path='/cars/:slug/details' element={<CarDetails/>} />
+        <Route exact path='/cars/:id/details' element={<CarDetails/>} />
         <Route exact path='/tutors' element={<TutorListing/>} />
         <Route exact path='/tutors/:id' element={<TutorListing/>} />
-        <Route exact path='/tutors/:name/details' element={<TutorDetails/>} />
+        <Route exact path='/tutors/:id/details' element={<TutorDetails/>} />
         <Route exact path='/contact' element={<Contact/>} />
         <Route exact path='/contact/:id' element={<Contact/>} />
         <Route exact path='/earn-with-us' element={<UploadCar/>} />

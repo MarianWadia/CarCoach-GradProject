@@ -41,11 +41,6 @@ const Signin = () => {
           </Link>
           <h5 className='login__with'>or login with</h5>
           <hr className='horizontal__line' />
-          <div className="icons__container">
-            <span className='icon icon-1'><FaFacebook/></span>
-            <span className='icon icon-2'><FaInstagram/></span>
-            <span className='icon icon-3'><FaTwitter /></span>
-          </div>
           <Link to="/signup" className='signup__content'>
             <h5 >don't have an account? signup</h5>
           </Link>

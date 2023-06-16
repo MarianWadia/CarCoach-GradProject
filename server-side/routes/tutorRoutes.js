@@ -122,7 +122,7 @@ router.get("/tutors-applicants", async (req, res)=>{
         const response = result.rowCount;
         if(response){
             const data = result.rows;
-            res.status(200).json({data: data})
+            res.status(200).json(data)
         }
     } catch (error) {
         console.error(error);
@@ -134,14 +134,14 @@ router.get("/tutors-applicants", async (req, res)=>{
 router.get("/tutors-applicants/:id", async (req, res)=>{
     try {
         const { id } = req.params;
-        const result = await pool.query('SELECT is_accepted, first_name, last_name, phone, age, gender, experience_years, driver_image, working_location, bio FROM tutors_applicants WHERE id = ($1)', [
+        const result = await pool.query('SELECT is_accepted, first_name, last_name, phone, age, gender, experience_years, driver_image, working_location, bio, email FROM tutors_applicants WHERE id = ($1)', [
             id
         ]);
         const is_accepted = result.rows[0].is_accepted
         if(is_accepted===true){
-            const {first_name, last_name, phone, age, gender, experience_years, driver_image, working_location, bio, email} = result.rows[0];
+            const {first_name, last_name, phone, age, gender, experience_years, driver_image, working_location, bio, email, rating} = result.rows[0];
             const response = {
-                name: `${first_name}${last_name}`,
+                name: `${first_name} ${last_name}`,
                 phone,
                 email,
                 age,
@@ -149,7 +149,8 @@ router.get("/tutors-applicants/:id", async (req, res)=>{
                 experience_years,
                 working_location,
                 bio,
-                driver_image
+                driver_image, 
+                rating
             }
             res.status(200).json(response);
         }
