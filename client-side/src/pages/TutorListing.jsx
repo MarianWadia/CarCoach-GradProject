@@ -4,10 +4,12 @@ import DocumentTitle from "../components/DocumentTitle/DocumentTitle"
 import CommonSection from '../components/UI/CommonSection'
 import TutorItem from "../components/UI/TutorItem";
 import axios from "axios"
+import { useParams } from 'react-router-dom';
 
 
 
 const TutorListing = () => {
+  const {id} = useParams();
   const [data, setData] = useState(null);
   useEffect(()=>{
     const fetchData = async () => {
@@ -44,7 +46,7 @@ const TutorListing = () => {
             </Col> 
 
             {data?data.map((item) => (
-              <TutorItem item={item} key={item.id} />
+              <TutorItem item={item} key={item.id} user_id={id} />
             )):(<p>Loading data...</p>)}
           </Row>
         </Container>

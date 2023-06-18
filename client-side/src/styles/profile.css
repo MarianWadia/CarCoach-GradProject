@@ -11,7 +11,6 @@
     height: 350px !important;
     display: flex;
     flex-direction: column;
-    align-items: center;
     background-color: rgba(98, 146, 168, 0.918) !important;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(8.5px);
@@ -27,4 +26,13 @@
     font-size: 30px;
     font-weight: 100;
     margin-top: 20px;
+    text-align: center;
+}
+.profile__sessiondata{
+    color: black !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
 }

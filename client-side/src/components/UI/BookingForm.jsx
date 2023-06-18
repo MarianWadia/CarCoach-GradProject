@@ -8,7 +8,8 @@ import swal from "sweetalert"
 
 
 const BookingForm = ({service}) => {
-  const [userId, setUserId] = useState(useParams().id)
+  const {id, user_id} = useParams()
+  // const [user_id, setUserId] = useState(useParams().user_id)
   const [responseObject, setResponseObject] = useState({});
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -47,7 +48,7 @@ const BookingForm = ({service}) => {
     event.preventDefault();
     try {
       const data = new FormData(event.target);
-      const response = await axios.post(`http://localhost:8080/api/tutors-applicants/${userId}`, data);
+      const response = await axios.post(`http://localhost:8080/api/tutors-applicants/${id}`, data);
       const responseData  = await response.data;
       setResponseObject(responseData);
       console.log(responseObject);
@@ -68,9 +69,10 @@ const BookingForm = ({service}) => {
         button: "Done",
       });
       setTimeout(() => {
-        window.location.href = `/home/${userId}`
+        window.location.href = `/home/${user_id?user_id:id}`
       }, 3000);
     }
+
   }, [success, responseObject]);
   
   useEffect(() => {
@@ -82,7 +84,8 @@ const BookingForm = ({service}) => {
         button: "close",
       });
     }
-  }, [error]);
+
+  }, []);
 
 
   const {tutorId} = useParams();
@@ -127,7 +130,7 @@ const submitCarHandler = useCallback(async (event) => {
   event.preventDefault();
   try {
     const data = new FormData(event.target);
-    const response = await axios.post(`http://localhost:8080/api/car-uploads/${userId?userId:""}`, data);
+    const response = await axios.post(`http://localhost:8080/api/car-uploads/${id?id:""}`, data);
     const responseData  = await response.data;
     setResponseObject(responseData);
     console.log(responseObject);
@@ -139,16 +142,86 @@ const submitCarHandler = useCallback(async (event) => {
 },[])
 
 
+// ---------------------------------tutor reservations---------------------------------
+useEffect(() => {
+  if(responseObject.doneMessage){
+    swal({
+      title: "Thank you for contacting us!",
+      text: responseObject.doneMessage,
+      icon: "success",
+      button: "Done",
+    });
+  }
+  if(responseObject.unauthorizedMessage){
+    swal({
+      title: "Unauthorized",
+      text: responseObject.unauthorizedMessage,
+      icon: "error",
+      button: "close",
+    });
+  }
+}, [success, responseObject]);
+
+const submitTutorReservationHandler = useCallback(async (event) => {
+  event.preventDefault();
+  try {
+    const formData  = new FormData(event.target);
+    const requestData = {};
+    formData.forEach((value, key) => {
+      requestData[key] = value;
+    });
+    console.log(requestData);
+    // variable id here is the tutorid
+    const response = await axios.post(`http://localhost:8080/api/tutor-reserve/${user_id?user_id+"/":""}${id}`, requestData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const responseData  = await response.data;
+    setResponseObject(responseData);
+    console.log(responseObject);
+    setSuccess(true);
+  } catch (error) {
+    console.error(error);
+    setError('An error occurred. Please try again later.');
+  }
+},[user_id])
+
+// ---------------------------------car reservations---------------------------------
+const submitCarReservationHandler = useCallback(async (event) => {
+  event.preventDefault();
+  try {
+    const formData  = new FormData(event.target);
+    const requestData = {};
+    formData.forEach((value, key) => {
+      requestData[key] = value;
+    });
+    console.log(requestData);
+    // variable id here is the tutorid
+    const response = await axios.post(`http://localhost:8080/api/car-rent/${user_id?user_id+"/":""}${id}`, requestData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const responseData  = await response.data;
+    setResponseObject(responseData);
+    console.log(responseObject);
+    setSuccess(true);
+  } catch (error) {
+    console.error(error);
+    setError('An error occurred. Please try again later.');
+  }
+},[user_id])
 
   if(service==="book"){
    return (
       <>
-        <Form onSubmit={''}>
+        <Form onSubmit={submitCarReservationHandler}>
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
-          <input type="text" required placeholder="First Name" name="first_name"/>
+          <input type="text" required placeholder="Name" name="name"/>
         </FormGroup>
         <FormGroup className="booking__form d-inline-block mb-4">
-          <input type="text" required placeholder="Last Name" name="last_name"/>
+          <input type="text" required placeholder="Your Address" name="address"/>
         </FormGroup>
 
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
@@ -159,41 +232,30 @@ const submitCarHandler = useCallback(async (event) => {
         </FormGroup>
 
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
-          <input type="text" required placeholder="From Address" name="from_address" />
+          <input type="text" required placeholder="Pickup Location" name="pickup_location" />
         </FormGroup>
         <FormGroup className="booking__form d-inline-block mb-4">
-          <input type="text" required placeholder="To Address" name="to_address" />
+          <input type="text" required placeholder="Return Location" name="return_location" />
         </FormGroup>
 
         <FormGroup className="booking__form d-inline-block me-4 mb-4">
-          <select name="persons" id="">
-            <option value="1 person">1 Person</option>
-            <option value="2 person">2 Person</option>
-            <option value="3 person">3 Person</option>
-            <option value="4 person">4 Person</option>
-            <option value="5+ person">5+ Person</option>
-          </select>
-        </FormGroup>
-        <FormGroup className="booking__form d-inline-block mb-4">
-          <select name="luggage" id="">
-            <option value="1 luggage">1 luggage</option>
-            <option value="2 luggage">2 luggage</option>
-            <option value="3 luggage">3 luggage</option>
-            <option value="4 luggage">4 luggage</option>
-            <option value="5+ luggage">5+ luggage</option>
-          </select>
-        </FormGroup>
-
-        <FormGroup className="booking__form d-inline-block me-4 mb-4">
-          <input type="date" required placeholder="Journey Date" name="date"/>
+          <input type="date" required placeholder="Journey Date" name="journey_date"/>
         </FormGroup>
         <FormGroup className="booking__form d-inline-block mb-4">
           <input
-            type="time"
-            required placeholder="Journey Time"
-            className="time__picker"
-            name="time"
+            type="text"
+            required placeholder="Renting Duration"
+            name="renting_period"
           />
+        </FormGroup>
+
+        <FormGroup className="booking__form textarea__tutor">
+            <select name="payment_method" id="">
+            <option value="cash">Cash</option>
+            <option value="direct bank transfer">Direct Bank Transfer</option>
+              <option value="mastercard">Master Card</option>
+              <option value="paypal">PayPal</option>
+            </select>
         </FormGroup>
 
         <FormGroup>
@@ -205,86 +267,149 @@ const submitCarHandler = useCallback(async (event) => {
             name="details"
           ></textarea>
         </FormGroup>
+        <button type="submit" className="contact__btn">
+             Reserve Now
+        </button>
       </Form>
       </>
-      )} else if(service==="earn"){
+      )}if(service==="tutor_booking"){
         return (
-          <div>
-            <Form onSubmit={submitCarHandler}>
+           <>
+             <Form onSubmit={submitTutorReservationHandler}>
+             <FormGroup className="booking__form d-inline-block me-4 mb-4">
+               <input type="text" required placeholder="Name" name="name"/>
+             </FormGroup>
+     
+             <FormGroup className="booking__form d-inline-block mb-4">
+               <input type="email" required placeholder="Email" name="email" />
+             </FormGroup>
+
+             <FormGroup className="booking__form d-inline-block me-4 mb-4">
+               <input type="tel" required placeholder="Phone Number" name="phone"/>
+             </FormGroup>
+     
+             <FormGroup className="booking__form d-inline-block mb-4">
+               <input type="date" required placeholder="Start Date" name="start_date" className="date__picker__tutor"/>
+             </FormGroup>
+
+             <FormGroup className="booking__form d-inline-block me-4 mb-4">
+               <input
+                 type="time"
+                 required placeholder="Time"
+                 className="time__picker__tutor"
+                 name="session_time"
+               />
+             </FormGroup>
+
+             <FormGroup className="booking__form d-inline-block mb-4">
+               <select name="package_price" id="">
+                 <option value="basic">Basic</option>
+                 <option value="standard">Standard</option>
+                 <option value="platinum">Platinum</option>
+               </select>
+             </FormGroup>
+
+             <FormGroup className="booking__form textarea__tutor">
+               <select name="payment_method" id="">
+                <option value="cash">Cash</option>
+                <option value="direct bank transfer">Direct Bank Transfer</option>
+                 <option value="mastercard">Master Card</option>
+                 <option value="paypal">PayPal</option>
+               </select>
+             </FormGroup>
+
+             <FormGroup>
+               <textarea
+                 rows={5}
+                 type="textarea"
+                 className="textarea"
+                 required placeholder="Write"
+                 name="details"
+               ></textarea>
+             </FormGroup>
+              <button type="submit" className="contact__btn">
+                Reserve Now
+              </button>
+           </Form>
+           </>
+           )} else if(service==="earn"){
+          return (
+            <div>
+              <Form onSubmit={submitCarHandler}>
+            <FormGroup className="booking__form d-inline-block me-4 mb-4">
+              <input type="text" required placeholder="Name" name="name"/>
+            </FormGroup>
+
+            <FormGroup className="booking__form d-inline-block mb-4">
+              <input type="tel" required placeholder="Phone Number" name="phone" />
+            </FormGroup>
+
+            <FormGroup className="booking__form d-inline-block me-4 mb-4">
+              <input type="text" required placeholder="License Plate" name="license_plate"/>
+            </FormGroup>
+
+            <FormGroup className="booking__form d-inline-block mb-4">
+              <input type="text" required placeholder="Pickup Location" name="from_address"/>
+            </FormGroup>
+
+            <FormGroup className="booking__form d-inline-block me-4 mb-4">
+              <input type="number" required placeholder="Speed Per Hour" name="hour_speed" />
+            </FormGroup>
+            
+            <FormGroup className="booking__form d-inline-block mb-4">
+              <input type="text" required placeholder="Car Year" name="year" />
+            </FormGroup>    
+
           <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="text" required placeholder="Name" name="name"/>
-          </FormGroup>
+              <input type="text" required placeholder="Car Model" name="model"  />
+            </FormGroup>
 
-          <FormGroup className="booking__form d-inline-block mb-4">
-            <input type="tel" required placeholder="Phone Number" name="phone" />
-          </FormGroup>
+            <FormGroup className="booking__form  d-inline-block mb-4">
+              <input type="file" required placeholder="Upload you car image" name= "car_image" className="upload__image__earn" />
+            </FormGroup>
 
-          <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="text" required placeholder="License Plate" name="license_plate"/>
-          </FormGroup>
+            <FormGroup className="booking__form d-inline-block me-4 mb-4">
+              <select name="usage" id="">
+                <option value="renting">For Renting</option>
+                <option value="coaching">For Driving Services</option>
+              </select>
+            </FormGroup>
+            
+            <FormGroup className="booking__form d-inline-block mb-4">
+              <select name="motor_type" id="">
+                <option value="automatic">Automatic Car</option>
+                <option value="manual">Manual Car</option>
+              </select>
+            </FormGroup>
 
-          <FormGroup className="booking__form d-inline-block mb-4">
-            <input type="text" required placeholder="Pickup Location" name="from_address"/>
-          </FormGroup>
+            <FormGroup className="booking__form d-inline-block me-4 mb-4">
+              <input type="date" required className="time__picker__earn" name="available_from"/>
+            </FormGroup>
 
-          <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="number" required placeholder="Speed Per Hour" name="hour_speed" />
-          </FormGroup>
-          
-          <FormGroup className="booking__form d-inline-block mb-4">
-            <input type="text" required placeholder="Car Year" name="year" />
-          </FormGroup>    
+            <FormGroup className="booking__form d-inline-block mb-4">
+              <input
+                type="number"
+                required placeholder="Price Per Hour"
+                name="hour_price"
+              />
+            </FormGroup>
 
-        <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="text" required placeholder="Car Model" name="model"  />
-          </FormGroup>
+            <FormGroup>
+              <textarea
+                rows={5}
+                type="textarea"
+                className="textarea"
+                required placeholder="Additional Details..."
+                name="details"
+              ></textarea>
+            </FormGroup>
 
-          <FormGroup className="booking__form  d-inline-block mb-4">
-            <input type="file" required placeholder="Upload you car image" name= "car_image" className="upload__image__earn" />
-          </FormGroup>
-
-          <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <select name="usage" id="">
-              <option value="renting">For Renting</option>
-              <option value="coaching">For Driving Services</option>
-            </select>
-          </FormGroup>
-          
-          <FormGroup className="booking__form d-inline-block mb-4">
-            <select name="motor_type" id="">
-              <option value="automatic">Automatic Car</option>
-              <option value="manual">Manual Car</option>
-            </select>
-          </FormGroup>
-
-          <FormGroup className="booking__form d-inline-block me-4 mb-4">
-            <input type="date" required className="time__picker__earn" name="available_from"/>
-          </FormGroup>
-
-          <FormGroup className="booking__form d-inline-block mb-4">
-            <input
-              type="number"
-              required placeholder="Price Per Hour"
-              name="hour_price"
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <textarea
-              rows={5}
-              type="textarea"
-              className="textarea"
-              required placeholder="Additional Details..."
-              name="details"
-            ></textarea>
-          </FormGroup>
-
-          <button className="contact__btn" type="submit">
-              Upload Car
-          </button>
-        </Form>
-        </div>
-      )}
+            <button className="contact__btn" type="submit">
+                Upload Car
+            </button>
+          </Form>
+          </div>
+        )}
 
       else if(service==="join"){
        
@@ -366,16 +491,9 @@ const submitCarHandler = useCallback(async (event) => {
                   name="bio"
                 ></textarea>
               </FormGroup>
-              {/* {tutorMessage && <p>{tutorMessage}</p>} */}
               <button className="contact__btn" type="submit">
                   Apply Now
               </button>
-
-              {/* <Link to={id ? `join-us/${id}/upload-car/${tutorId}`: 'join-us/upload-car'} >
-                <button  className="contact__btn ms-2" type="button">
-                    Upload car Details Here
-                </button>
-              </Link> */}
             </Form>
           </div>
       )}

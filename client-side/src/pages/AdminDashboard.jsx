@@ -1,29 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "../styles/admin.css"
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import CommonSection from '../components/UI/CommonSection'
-import DocumentTitle from '../components/DocumentTitle/DocumentTitle'
+import AdminDetails from '../components/UI/AdminDetails'
 
-const AdminDashboard = () => {
+const AdminDashboard = ({name}) => {
+  const [paramId, setParamId] = useState(useParams().id)
   return (
-    <div>
-        <CommonSection title="Admin Dashboard" />
-        <div className='left__admin'>
-            <Link to=''>
+    <div className='admin__page'>
+      {/* <CommonSection title="Admin Dashboard" /> */}
+        <div className='admin__layout'>  
+          <div className='left__admin'>
+            <Link to={`/admin/${paramId}/users`}>
               <h4>users</h4>
             </Link>
-            <Link to=''>
+            <Link to={`/admin/${paramId}/tutors_applicants`}>
               <h4>Tutors</h4>
             </Link>
-            <Link to=''>
+            <Link to={`/admin/${paramId}/tutor_reservations`}>
               <h4>Reservations</h4>
             </Link>
-            <Link to=''>
+            <Link to={`/admin/${paramId}/rental_reservations`}>
               <h4>Renting</h4>
             </Link>
-            <Link to=''>
+            <Link to={`/admin/${paramId}/car_uploads`}>  
               <h4>Car Uploads</h4>
             </Link>
+            <Link to={`/admin/${paramId}/students`}>  
+              <h4>Students</h4>
+            </Link>
+            <Link to={`/admin/${paramId}/sessions`}>  
+              <h4>Sessions</h4>
+            </Link>
+            <Link to={`/admin/${paramId}/renters`}>  
+              <h4>Renters</h4>
+            </Link>
+            <Link to={`/admin/${paramId}/contacts`}>  
+              <h4>Contacts</h4>
+            </Link>
+          </div>
+          <div className='right__admin'>
+            <AdminDetails />
+          </div>
         </div>
     </div>
   )

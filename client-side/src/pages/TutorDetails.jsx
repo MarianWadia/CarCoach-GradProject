@@ -11,6 +11,7 @@ import axios from "axios"
 
 const TutorDetails = () => {
   const { id } = useParams();
+  console.log(id);
   const [data, setData] = useState(null);
 
   useEffect(()=>{
@@ -99,7 +100,7 @@ const TutorDetails = () => {
        <Col lg="7" className="mt-5">
          <div className="booking-info mt-5">
            <h5 className="mb-4 fw-bold ">Booking Information</h5>
-           <BookingForm service="book"/>
+           <BookingForm service="tutor_booking"/>
          </div>
        </Col>
 

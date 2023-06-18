@@ -1,11 +1,37 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const nodemailer = require('nodemailer');
 
 
+function sendEmail({ email, studentName, sessionDetails}) {
+  return new Promise((resolve, reject) => {
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.FROM_EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.FROM_EMAIL,
+      to: email,
+      subject: 'Upcoming Drive Coaching Session',
+      text: `Dear ${studentName}, Here are the details of your upcoming session: ${sessionDetails}`,
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+        return reject({ message: `An error has occurred` });
+      }
+      return resolve({ message: "Email sent successfully" });
+    });
+  });
+}
 
 router.post('/sessions/:id?/:student_id', async (req, res) => {
-    const { start_time, session_date, session_duration, location } = req.body;
+    const { startTime, sessionDate, sessionDuration, SessionLocation } = req.body;
     const admin_id = req.params.id || null;
     const {student_id} = req.params
     try {
@@ -13,9 +39,16 @@ router.post('/sessions/:id?/:student_id', async (req, res) => {
         res.json({unauthorizedMessage: "You should Login First. If You Don't have an account Signup Now!"});
       }else{
         const data = await pool.query(
-          'INSERT INTO sessions (admin_id, student_id, start_time, session_date, session_duration, location) VALUES ($1, $2, $3, $4, $5, $6)',
-         [admin_id, student_id, start_time, session_date, session_duration, location]
+          'INSERT INTO sessions (admin_id, student_id, start_time, session_date, session_duration, location) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+         [admin_id, student_id, startTime, sessionDate, sessionDuration, SessionLocation]
         );
+         const sessionData = data.rows[0];
+        //const {startTime, sessionDate, sessionDuration, sessionLocation} = data.rows[0]
+        const getStudentData = await pool.query(`SELECT tr.name, tr.email FROM  tutor_reservations tr JOIN students st
+        ON tr.id = st.reservation_id WHERE st.id = ${student_id} `);
+        const {name, email} = getStudentData.rows[0]
+        sendEmail({email, studentName: name, 
+        sessionDetails: `Your upcoming session is at ${sessionData.start_time} on ${sessionData.session_date} and will be for ${sessionData.session_duration} your session location is ${sessionData.location}. Don't be late!`});
         res.status(201).json({doneMessage: "Data Uploaded Successfully Thank You!"});
       }
     } catch (error) {

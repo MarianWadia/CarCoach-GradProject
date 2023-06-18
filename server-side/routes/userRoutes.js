@@ -37,7 +37,11 @@ router.post('/signup', async (req, res) => {
       }
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
       const updateToken = await pool.query('UPDATE users SET token = $1 WHERE id = $2', [token, user.id]);
-      res.json({ token, id: user.id });
+      if(user.is_admin === true){
+        res.json({ token, id: user.id, redirectUrl: `http://localhost:3000/admin/${user.id}/users`});
+      }else{
+        res.json({ token, id: user.id, redirectUrl: `http://localhost:3000/home/${user.id}`});
+      }
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'An error occurred' });

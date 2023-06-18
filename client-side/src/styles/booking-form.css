@@ -18,11 +18,31 @@
     border-radius: 4px;
   }
   
+  .textarea__tutor{
+    width: 555px;
+    margin: -13px;
+    padding: 10px 15px;
+    color: #7c8a97;
+    border-radius: 4px;
+  }
+
   .textarea{
     width: 97%;
   }
   .time__picker::before {
     content: "Journey Time";
+    color: #7c8a97;
+    margin-right: 0.5rem;
+  }
+
+  .time__picker__tutor::before {
+    content: "Session Time";
+    color: #7c8a97;
+    margin-right: 0.5rem;
+  }
+
+  .date__picker__tutor::before {
+    content: "First Session Date";
     color: #7c8a97;
     margin-right: 0.5rem;
   }

@@ -5,8 +5,10 @@ import CommonSection from '../components/UI/CommonSection'
 import CarItem from "../components/UI/CarItem";
 import carData from "../assets/data/carData";
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const CarListing = () => {
+  const {id} = useParams();
   const [data, setData] = useState(null);
   useEffect(()=>{
     const fetchData = async () => {
@@ -41,7 +43,7 @@ const CarListing = () => {
             </Col>
 
             {data?data.map((item) => (
-              <CarItem item={item} key={item.id} />
+              <CarItem item={item} key={item.id} user_id={id} />
             )):(<p>Loading data...</p>)}
           </Row>
         </Container>

@@ -29,6 +29,7 @@ const searchRoutes = require('./routes/searchRoutes');
 const reserveTutorRoutes = require('./routes/reserveTutorRoutes');
 const rentCarRoutes = require('./routes/rentCarRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 
 
@@ -43,7 +44,8 @@ app.use('/api/car-image', express.static('upload/cars'))
 app.use('/api', searchRoutes);
 app.use('/api', reserveTutorRoutes);
 app.use('/api', rentCarRoutes);
-app.use('/api', sessionRoutes)
+app.use('/api', sessionRoutes);
+app.use('/api', adminRoutes);
 
 
 app.listen(port, () => {

@@ -163,31 +163,6 @@ router.get("/tutors-applicants/:id", async (req, res)=>{
     }
 })
 
-router.get("/tutors-applicants-admins", async (req, res)=>{
-    try {
-        const result = await pool.query('SELECT * FROM tutors_applicants');
-        const response = result.rowCount;
-        if(response){
-            const data = result.rows;
-            res.status(200).json({data: data})
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'An error occurred' });
-    }
-})
-
-  // delete tutor by admin
-router.delete("/tutors-applicants-admins/:tutor_id", async (req, res)=>{
-    try {
-      const {tutor_id} = req.params;
-        const result = await pool.query(`DELETE FROM tutors_applicants WHERE id=${tutor_id}`);
-        res.status(200).json({message: "Deleted successfully!"})
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'An error occurred' });
-    }
-  })
  //update tutor acceptance in tutors_applicants table and is_tutor in users table -- by admin
   router.put("/tutors-applicants-admins/:tutor_id", async (req, res)=>{
     try {

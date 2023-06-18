@@ -6,7 +6,8 @@ import {HiOutlineLocationMarker} from "react-icons/hi"
 
 const TutorItem = (props) => {
     const { first_name, last_name, email, age, driver_image, working_location, experience_years, rating, bio, gender, id} = props.item;
-    console.log(props.item)
+    const {user_id} = props;
+
   return (
     <Col lg="4" md="4" sm="6" className="mb-5">
     <div className="car__item">
@@ -37,11 +38,11 @@ const TutorItem = (props) => {
         </div>
 
         <button className=" w-50 car__item-btn car__btn-rent">
-          <Link to={`/tutors/${id}/details`}>Reserve</Link>
+          <Link to={user_id?`/tutors/${id}/details/${user_id}`:`/tutors/${id}/details/`}>Reserve</Link>
         </button>
 
         <button className=" w-50 car__item-btn car__btn-details">
-          <Link to={`/tutors/${id}/details`}>Details</Link>
+          <Link to={user_id?`/tutors/${id}/details/${user_id}`:`/tutors/${id}/details/`}>Details</Link>
         </button>
       </div>
     </div>

@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 router.post('/car-rent/:id?/:car_id', async (req, res) => {
-    const { name, phone, email, address, start_time, end_time, pickup_location, return_location, payment_method} = req.body;
+    const { name, phone, email, address, renting_period, pickup_location, return_location, journey_date, payment_method} = req.body;
     const user_id = req.params.id || null;
     const {car_id} = req.params
     try {
@@ -21,8 +21,8 @@ router.post('/car-rent/:id?/:car_id', async (req, res) => {
         );
         const renter_id =  result.rows[0].id;
         const result2 = await pool.query(
-            'INSERT INTO rental_reservations (car_id, renter_id, start_time, end_time, pickup_location, return_location, payment_method, reservation_time) VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP) RETURNING id',
-            [car_id, renter_id, start_time, end_time, pickup_location, return_location, payment_method]);
+            'INSERT INTO rental_reservations (car_id, renter_id, renting_period, pickup_location, return_location, journey_date, payment_method, reservation_time) VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP) RETURNING id',
+            [car_id, renter_id, renting_period, pickup_location, return_location, journey_date, payment_method]);
         res.status(201).json({doneMessage: "We will contact you back shortly!"});
       }
     } catch (error) {
