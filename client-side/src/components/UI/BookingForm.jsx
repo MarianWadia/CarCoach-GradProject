@@ -106,25 +106,6 @@ const BookingForm = ({service}) => {
    
     
 // ---------------------------------cars upload---------------------------------
-useEffect(() => {
-  if(responseObject.doneMessage){
-    swal({
-      title: "Thank you for contacting us!",
-      text: responseObject.doneMessage,
-      icon: "success",
-      button: "Done",
-    });
-  }
-  if(responseObject.unauthorizedMessage){
-    swal({
-      title: "Unauthorized",
-      text: responseObject.unauthorizedMessage,
-      icon: "error",
-      button: "close",
-    });
-  }
-}, [success, responseObject]);
-
 
 const submitCarHandler = useCallback(async (event) => {
   event.preventDefault();
@@ -143,24 +124,6 @@ const submitCarHandler = useCallback(async (event) => {
 
 
 // ---------------------------------tutor reservations---------------------------------
-useEffect(() => {
-  if(responseObject.doneMessage){
-    swal({
-      title: "Thank you for contacting us!",
-      text: responseObject.doneMessage,
-      icon: "success",
-      button: "Done",
-    });
-  }
-  if(responseObject.unauthorizedMessage){
-    swal({
-      title: "Unauthorized",
-      text: responseObject.unauthorizedMessage,
-      icon: "error",
-      button: "close",
-    });
-  }
-}, [success, responseObject]);
 
 const submitTutorReservationHandler = useCallback(async (event) => {
   event.preventDefault();
