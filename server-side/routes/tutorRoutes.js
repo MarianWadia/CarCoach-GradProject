@@ -116,19 +116,28 @@ router.post('/tutors-applicants/car/:tutorId', upload.single('car_image'), async
 })
 
 
-router.get("/tutors-applicants", async (req, res)=>{
+router.get("/tutors-applicants-all/:searchBy?", async (req, res)=>{
     try {
+      const {searchBy} = req.params || { searchBy: null };
+      let response;
+      if (searchBy && searchBy === 'female') {
+        const result = await pool.query(`SELECT * FROM tutors_applicants WHERE is_accepted=true AND gender = 'female'`);
+        response = result.rows;
+      } else if (searchBy && searchBy === 'male') {
+        const result = await pool.query(`SELECT * FROM tutors_applicants WHERE is_accepted=true AND gender = 'male'`);
+        response = result.rows;
+      } else {
         const result = await pool.query('SELECT * FROM tutors_applicants WHERE is_accepted=true');
-        const response = result.rowCount;
-        if(response){
-            const data = result.rows;
-            res.status(200).json(data)
-        }
+        response = result.rows;
+      }
+      if(response){
+        res.status(200).json(response);
+      }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'An error occurred' });
+      console.error(error);
+      res.status(500).json({ message: 'An error occurred' });
     }
-})
+  })
 
 
 router.get("/tutors-applicants/:id", async (req, res)=>{

@@ -1,17 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HeroSlider from '../components/UI/HeroSlider'
 import DocumentTitle from '../components/DocumentTitle/DocumentTitle'
 import {Row, Col, Container} from "reactstrap"
 import ReserveForm from '../components/UI/ReserveForm'
 import AboutSection from '../components/UI/AboutSection'
 import ServicesList from '../components/UI/ServicesList'
-import carData from "../assets/data/carData"
 import CarItem from '../components/UI/CarItem'
 import BecomeDriverSection from '../components/UI/BecomeDriverSection'
 import Testimonials from '../components/UI/Testimonials'
 import BlogList from '../components/UI/BlogList'
+import axios from 'axios'
 
 const Home = () => {
+  const [data, setData] = useState(null);
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/car-uploads');
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
       <DocumentTitle title="Home">
         <section className="p-0 hero__slider-section">
@@ -56,9 +69,9 @@ const Home = () => {
               <h2 className="section__title">Hot Offers</h2>
             </Col>
 
-            {carData.slice(0, 6).map((item) => (
+            {data?data.slice(0, 6).map((item) => (
               <CarItem item={item} key={item.id} />
-            ))}
+            )):(<p>Loading data...</p>)}
           </Row>
         </Container>
       </section>

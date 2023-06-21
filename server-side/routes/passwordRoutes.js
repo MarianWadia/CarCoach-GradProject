@@ -10,7 +10,6 @@ dotenv.config();
 
 const router = express.Router();
 
-
 // generate a random token
 function generateToken() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -99,7 +98,7 @@ router.post('/reset', async (req, res) => {
       user.rows[0].id,
     ]);
 
-    res.status(200).send('Password reset successfully');
+    res.status(200).json({message: 'Password reset successfully', id: user.rows[0].id});
   } catch (error) {
     console.error("Internal server error: " + error.message);
   }

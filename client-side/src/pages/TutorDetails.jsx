@@ -10,14 +10,13 @@ import axios from "axios"
 
 
 const TutorDetails = () => {
-  const { id } = useParams();
-  console.log(id);
+  const { tutor_id } = useParams();
   const [data, setData] = useState(null);
 
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/tutors-applicants/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/tutors-applicants/${tutor_id}`);
         setData(response.data);
       } catch (error) {
         console.error(error);

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import {FaFacebook, FaInstagram, FaTwitter} from 'react-icons/fa'
 import "../styles/signin.css"
 import { Link } from 'react-router-dom';
 import DocumentTitle from "../components/DocumentTitle/DocumentTitle"
@@ -15,9 +14,13 @@ const Signin = () => {
     console.log('Form submitted');
     try {
       const response = await axios.post('http://localhost:8080/api/users/signin', { email, password });
-      localStorage.setItem('token', response.data.token);
-      const {redirectUrl} = response.data;
-      window.location.href = redirectUrl;
+      if(response.data.errorMessage){
+        setError(response.data.errorMessage);
+      }else{
+        localStorage.setItem('token', response.data.token);
+        const {redirectUrl} = response.data;
+        window.location.href = redirectUrl;
+      }
     } catch (err) {
       console.error(err);
       setError('Invalid email or password');
@@ -31,8 +34,8 @@ const Signin = () => {
         <div className="signup__form">
         <h2 className='welcome__text'>Welcome Back</h2>
           <form className="input__container" onSubmit={handleSubmit}>
-            <input type="email" placeholder="Email" required className='signin__input' value={email} onChange={(event) => setEmail(event.target.value)} />
-            <input type="password" placeholder="Password" required className='signin__input' value={password} onChange={(event) => setPassword(event.target.value)} />
+            <input type="email" placeholder="Email" className='signin__input' value={email} onChange={(event) => setEmail(event.target.value)} />
+            <input type="password" placeholder="Password" className='signin__input' value={password} onChange={(event) => setPassword(event.target.value)} />
             {error && <p className="error__message">{error}</p>}
             <button type='submit' className='signin__button'>Sign in</button>
           </form>

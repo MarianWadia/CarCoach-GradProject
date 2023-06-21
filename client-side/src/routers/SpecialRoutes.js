@@ -15,8 +15,6 @@ const SpecialRoutes = () => {
         <Route exact path='/forgot' element={<ForgotPassword/>} />
         <Route exact path='/reset/:token' element={<ResetPassword/>} />
         <Route exact path={`/admin/:id/:name?`} element={<AdminDashboard name={name?name:""} />} />
-
-
     </Routes>
   )
 }

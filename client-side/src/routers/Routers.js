@@ -28,12 +28,12 @@ const Routers = () => {
         <Route exact path='/about/:id' element={<About/>} />
         <Route exact path='/cars' element={<CarListing/>} />
         <Route exact path='/cars/:id' element={<CarListing/>} />
-        <Route exact path='/cars/:id/details' element={<CarDetails/>} />
-        <Route exact path='/cars/:id/details/:user_id' element={<CarDetails/>} />
+        <Route exact path='/cars/:carId/details' element={<CarDetails/>} />
+        <Route exact path='/cars/:carId/details/:user_id' element={<CarDetails/>} />
         <Route exact path='/tutors' element={<TutorListing/>} />
         <Route exact path='/tutors/:id' element={<TutorListing/>} />
-        <Route exact path='/tutors/:id/details' element={<TutorDetails/>} />
-        <Route exact path='/tutors/:id/details/:user_id' element={<TutorDetails/>} />
+        <Route exact path='/tutors/:tutor_id/details' element={<TutorDetails/>} />
+        <Route exact path='/tutors/:tutor_id/details/:user_id' element={<TutorDetails/>} />
         <Route exact path='/contact' element={<Contact/>} />
         <Route exact path='/contact/:id' element={<Contact/>} />
         <Route exact path='/earn-with-us' element={<UploadCar/>} />

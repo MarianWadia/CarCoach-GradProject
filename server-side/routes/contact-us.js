@@ -21,26 +21,4 @@ router.post('/contact-us/:id?', async (req, res) => {
   }
 });
 
-router.get("/contact-us", async (req, res)=>{
-  try {
-      const result = await pool.query(`SELECT * FROM contacts`);
-      const response = result.rows;
-      res.status(200).json(response)
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'An error occurred' });
-  }
-})
-
-router.delete("/contact-us/:contact_id", async (req, res)=>{
-  try {
-    const {contact_id} = req.params;
-      const result = await pool.query(`DELETE FROM contacts WHERE id=${contact_id}`);
-      res.status(200).json({message: "Deleted successfully!"})
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'An error occurred' });
-  }
-})
-
 module.exports = router;

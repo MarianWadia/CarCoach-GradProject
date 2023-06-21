@@ -28,5 +28,4 @@ router.delete("/admin/:table_name/:id", async (req, res)=>{
     }
 })
 
-
 module.exports = router;

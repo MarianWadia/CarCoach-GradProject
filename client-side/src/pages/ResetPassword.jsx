@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import "../styles/signin.css"
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import DocumentTitle from "../components/DocumentTitle/DocumentTitle";
-
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');
@@ -17,17 +16,16 @@ const ResetPassword = () => {
         e.preventDefault();
         if (password !== confirmPassword) {
             setPasswordError('Passwords must match');
-            // alert("passwords do not match");
             return;
           }
-    
         try {
-          
           const response = await axios.post('http://localhost:8080/api/password/reset', { token, password });
-          
-          setMessage(response.data);
-          localStorage.setItem('token', response.data.token);
-          window.location.href = '/';
+          setMessage(response.data.message);
+          const id = response.data.id;
+          if(id){
+            localStorage.setItem('token', response.data.token);
+            window.location.href = `/home/${id}`;
+          }
         } catch (error) {
           setMessage(error.response.data);
         }
@@ -46,7 +44,7 @@ const ResetPassword = () => {
         <form className="input__container" onSubmit={handleSubmit}>
             <input type="password" placeholder="New Password" required className='signin__input' value={password} onChange={(event) => setPassword(event.target.value)} />
             <input type="password" placeholder="Confirm New Password" required className='signin__input'value={confirmPassword} onChange={handleConfirmPasswordChange} />
-            {message && <p className="error__message">{message}</p>}
+            {message && <p className="error__message text-green">{message}</p>}
             <button type='submit' className='signin__button'>Submit</button>
         </form>
         <hr className='horizontal__line' />

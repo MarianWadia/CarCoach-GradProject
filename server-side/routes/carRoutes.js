@@ -55,16 +55,27 @@ const storage = multer.diskStorage({
   })
 
 
-  router.get("/car-uploads", async (req, res)=>{
+  router.get("/car-uploads/:searchBy?", async (req, res)=>{
     try {
+      const {searchBy} = req.params || { searchBy: null };
+      if (searchBy && searchBy.toUpperCase() === 'ASC') {
+        const result = await pool.query(`SELECT * FROM car_uploads WHERE available=true AND usage='renting' ORDER BY hour_price ASC`);
+        const response = result.rows;
+        res.status(200).json(response);
+      } else if (searchBy && searchBy.toUpperCase() === 'DESC') {
+        const result = await pool.query(`SELECT * FROM car_uploads WHERE available=true AND usage='renting' ORDER BY hour_price DESC`);
+        const response = result.rows;
+        res.status(200).json(response);
+      } else {
         const result = await pool.query(`SELECT * FROM car_uploads WHERE available=true AND usage='renting'`);
         const response = result.rows;
-        res.status(200).json(response)
+        res.status(200).json(response);
+      }  
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'An error occurred' });
+      console.error(error);
+      res.status(500).json({ message: 'An error occurred' });
     }
-})
+  })
 
   router.get("/car-uploads/:id", async (req, res)=>{
     try{
@@ -77,32 +88,6 @@ const storage = multer.diskStorage({
         res.status(500).json({ message: 'An error occurred' });
     }
 })
-
-router.get("/car-uploads-admins", async (req, res)=>{
-    try {
-        const result = await pool.query('SELECT * FROM car_uploads');
-        const response = result.rowCount;
-        if(response){
-            const data = result.rows;
-            res.status(200).json({data: data})
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'An error occurred' });
-    }
-})
-
-  // delete renting reservation by admin
-  router.delete("/car-uploads-admins/:car_id", async (req, res)=>{
-    try {
-      const {car_id} = req.params;
-        const result = await pool.query(`DELETE FROM car_uploads WHERE id=${car_id}`);
-        res.status(200).json({message: "Deleted successfully!"})
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'An error occurred' });
-    }
-  })
 
   module.exports = router;
 

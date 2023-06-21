@@ -11,19 +11,21 @@ import { useParams } from 'react-router-dom';
 const TutorListing = () => {
   const {id} = useParams();
   const [data, setData] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  console.log(searchValue);
+
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/tutors-applicants');
+        const response = await axios.get(`http://localhost:8080/api/tutors-applicants-all${searchValue?"/"+searchValue: ""}`);
         setData(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-
+  
     fetchData();
-  }, []);
-  console.log(data);
+  }, [searchValue]);
 
   return (
     <DocumentTitle title="Reserver Tutor">
@@ -37,10 +39,10 @@ const TutorListing = () => {
                   <i class="ri-sort-asc"></i> Sort By
                 </span>
 
-                <select>
-                  <option>Select</option>
-                  <option value="low">Female</option>
-                  <option value="high">Male</option>
+                <select value={searchValue} onChange={(event) => setSearchValue(event.target.value)}>
+                  <option value="">Select</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
                 </select>
               </div>
             </Col> 

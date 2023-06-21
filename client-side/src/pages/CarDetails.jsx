@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import carData from "../assets/data/carData"
 import { Container, Row, Col } from "reactstrap";
 import DocumentTitle from '../components/DocumentTitle/DocumentTitle';
 import { useParams } from "react-router-dom";
@@ -9,13 +8,13 @@ import axios from 'axios';
 
 
 const CarDetails = () => {
-  const { id } = useParams();
+  const { carId } = useParams();
   const [data, setData] = useState(null);
 
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/car-uploads/${id}`);
+        const response = await axios.get(`http://localhost:8080/api/car-uploads/${carId}`);
         setData(response.data);
       } catch (error) {
         console.error(error);
@@ -92,32 +91,6 @@ const CarDetails = () => {
                     {`${data.hour_speed} kmpl`}
                   </span>
                 </div>
-
-                {/* <div
-                  className=" d-flex align-items-center mt-3"
-                  style={{ columnGap: "2.8rem" }}
-                >
-                  <span className=" d-flex align-items-center gap-1 section__description">
-                    <i class="ri-map-pin-line" style={{ color: "#f9a826" }}></i>{" "}
-                    {data.gps}
-                  </span>
-
-                  <span className=" d-flex align-items-center gap-1 section__description">
-                    <i
-                      class="ri-wheelchair-line"
-                      style={{ color: "#f9a826" }}
-                    ></i>{" "}
-                    {data.seatType}
-                  </span>
-
-                  <span className=" d-flex align-items-center gap-1 section__description">
-                    <i
-                      class="ri-building-2-line"
-                      style={{ color: "#f9a826" }}
-                    ></i>{" "}
-                    {data.brand}
-                  </span>
-                </div> */}
               </div>
             </Col>
 

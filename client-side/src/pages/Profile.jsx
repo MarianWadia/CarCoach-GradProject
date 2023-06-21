@@ -40,7 +40,7 @@ const Profile = () => {
                     
                  </div>
                 ):(
-                <p>Loading data...</p>
+                <p className='m-4 text-black'>No Reserved Tutors Found...</p>
                 )}
             </div>
         </section>

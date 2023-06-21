@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import "../styles/admin.css"
 import {Link, useParams} from 'react-router-dom'
-import CommonSection from '../components/UI/CommonSection'
 import AdminDetails from '../components/UI/AdminDetails'
 
 const AdminDashboard = ({name}) => {
   const [paramId, setParamId] = useState(useParams().id)
   return (
     <div className='admin__page'>
-      {/* <CommonSection title="Admin Dashboard" /> */}
         <div className='admin__layout'>  
           <div className='left__admin'>
             <Link to={`/admin/${paramId}/users`}>

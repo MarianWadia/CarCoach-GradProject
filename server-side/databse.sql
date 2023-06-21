@@ -1,7 +1,9 @@
+
+
 CREATE DATABASE IF NOT EXISTS carcoach;
 
---TODO: add phone number column and add default for is_tutor,is_admin and is_student to be false
--- *DONE*
+
+
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   first_name VARCHAR(255) NOT NULL,
@@ -16,7 +18,6 @@ CREATE TABLE IF NOT EXISTS users (
   is_admin BOOLEAN,
 );
 
--- *DONE*
 CREATE TABLE IF NOT EXISTS tutors_applicants (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
@@ -39,7 +40,6 @@ CREATE TABLE IF NOT EXISTS tutors_applicants (
   rating INTEGER
 );
 
--- *DONE*
 CREATE TABLE IF NOT EXISTS car_uploads (
   id SERIAL PRIMARY KEY,
   tutor_id INTEGER REFERENCES tutors_applicants(id),
@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS car_uploads (
   to_address VARCHAR(255)
 );
 
--- *DONE*
 CREATE TABLE IF NOT EXISTS tutor_reservations (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
@@ -75,7 +74,6 @@ CREATE TABLE IF NOT EXISTS tutor_reservations (
   package_price VARCHAR(255) NOT NULL
 );
 
--- *DONE*
 CREATE TABLE IF NOT EXISTS students (
   id SERIAL PRIMARY KEY,
   reservation_id INTEGER REFERENCES tutor_reservations(id),
@@ -95,7 +93,6 @@ CREATE TABLE IF NOT EXISTS sessions (
   session_duration VARCHAR(10) NOT NULL
 );
 
--- *DONE*
 CREATE TABLE IF NOT EXISTS renters (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
@@ -105,7 +102,6 @@ CREATE TABLE IF NOT EXISTS renters (
   address TEXT NOT NULL
 );
 
--- *DONE*
 CREATE TABLE IF NOT EXISTS rental_reservations (
   id SERIAL PRIMARY KEY,
   car_id INTEGER REFERENCES car_uploads(id),
@@ -118,7 +114,6 @@ CREATE TABLE IF NOT EXISTS rental_reservations (
   reservation_time TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
--- *DONE*
 CREATE TABLE IF NOT EXISTS contacts (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,

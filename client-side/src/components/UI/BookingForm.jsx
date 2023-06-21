@@ -8,7 +8,7 @@ import swal from "sweetalert"
 
 
 const BookingForm = ({service}) => {
-  const {id, user_id} = useParams()
+  const {id, user_id, carId, tutor_id} = useParams()
   // const [user_id, setUserId] = useState(useParams().user_id)
   const [responseObject, setResponseObject] = useState({});
   const [error, setError] = useState(null);
@@ -70,7 +70,7 @@ const BookingForm = ({service}) => {
       });
       setTimeout(() => {
         window.location.href = `/home/${user_id?user_id:id}`
-      }, 3000);
+      }, 6000);
     }
 
   }, [success, responseObject]);
@@ -106,6 +106,25 @@ const BookingForm = ({service}) => {
    
     
 // ---------------------------------cars upload---------------------------------
+useEffect(() => {
+  if(responseObject.doneMessage){
+    swal({
+      title: "Thank you for contacting us!",
+      text: responseObject.doneMessage,
+      icon: "success",
+      button: "Done",
+    });
+  }
+  if(responseObject.unauthorizedMessage){
+    swal({
+      title: "Unauthorized",
+      text: responseObject.unauthorizedMessage,
+      icon: "error",
+      button: "close",
+    });
+  }
+}, [success, responseObject]);
+
 
 const submitCarHandler = useCallback(async (event) => {
   event.preventDefault();
@@ -124,6 +143,24 @@ const submitCarHandler = useCallback(async (event) => {
 
 
 // ---------------------------------tutor reservations---------------------------------
+useEffect(() => {
+  if(responseObject.doneMessage){
+    swal({
+      title: "Thank you for contacting us!",
+      text: responseObject.doneMessage,
+      icon: "success",
+      button: "Done",
+    });
+  }
+  if(responseObject.unauthorizedMessage){
+    swal({
+      title: "Unauthorized",
+      text: responseObject.unauthorizedMessage,
+      icon: "error",
+      button: "close",
+    });
+  }
+}, [success, responseObject]);
 
 const submitTutorReservationHandler = useCallback(async (event) => {
   event.preventDefault();
@@ -134,8 +171,7 @@ const submitTutorReservationHandler = useCallback(async (event) => {
       requestData[key] = value;
     });
     console.log(requestData);
-    // variable id here is the tutorid
-    const response = await axios.post(`http://localhost:8080/api/tutor-reserve/${user_id?user_id+"/":""}${id}`, requestData, {
+    const response = await axios.post(`http://localhost:8080/api/tutor-reserve/${user_id?user_id+"/":""}${tutor_id}`, requestData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -161,7 +197,7 @@ const submitCarReservationHandler = useCallback(async (event) => {
     });
     console.log(requestData);
     // variable id here is the tutorid
-    const response = await axios.post(`http://localhost:8080/api/car-rent/${user_id?user_id+"/":""}${id}`, requestData, {
+    const response = await axios.post(`http://localhost:8080/api/car-rent/${user_id?user_id+"/":""}${carId}`, requestData, {
       headers: {
         'Content-Type': 'application/json'
       }
