@@ -43,7 +43,6 @@ router.post('/sessions/:id?/:student_id', async (req, res) => {
          [admin_id, student_id, startTime, sessionDate, sessionDuration, SessionLocation]
         );
          const sessionData = data.rows[0];
-        //const {startTime, sessionDate, sessionDuration, sessionLocation} = data.rows[0]
         const getStudentData = await pool.query(`SELECT tr.name, tr.email FROM  tutor_reservations tr JOIN students st
         ON tr.id = st.reservation_id WHERE st.id = ${student_id} `);
         const {name, email} = getStudentData.rows[0]

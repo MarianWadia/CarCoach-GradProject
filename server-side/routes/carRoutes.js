@@ -55,7 +55,7 @@ const storage = multer.diskStorage({
   })
 
 
-  router.get("/car-uploads/:searchBy?", async (req, res)=>{
+  router.get("/car-uploads-all/:searchBy?", async (req, res)=>{
     try {
       const {searchBy} = req.params || { searchBy: null };
       if (searchBy && searchBy.toUpperCase() === 'ASC') {

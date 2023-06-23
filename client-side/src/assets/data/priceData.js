@@ -1,78 +1,82 @@
 export const price = [
     {
       plan: "Basic",
-      price: "29",
+      price: "1150",
       ptext: "per user, per month",
       list: [
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "99.5% Uptime Guarantee",
+          text: " 5 driving lessons",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "120GB CDN Bandwidth",
+          text: "Practice on major highways",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "5GB Cloud Storage",
+          text: "Parking Practice",
         },
-        { change: "color", icon: <i class='fa-solid fa-x'></i>, text: "Personal Help Support" },
-        { change: "color", icon: <i class='fa-solid fa-x'></i>, text: "Enterprise SLA" },
+        {
+          icon: <i class='fa-solid fa-check'></i>,
+          text: "Practice How to Use Car Mirrors",
+        },
+        { change: "color", icon: <i class='fa-solid fa-x'></i>, text: "Personal Support" },
+        { change: "color", icon: <i class='fa-solid fa-x'></i>, text: "Assistance obtaining license" },
       ],
     },
     {
       best: "Best Value",
-      plan: "Standard",
-      price: "49",
+      plan: "Premium",
+      price: "1900",
       ptext: "per user, per month",
       list: [
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "99.5% Uptime Guarantee",
+          text: "9 Driving Sessions",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "150GB CDN Bandwidth",
+          text: "Driving preparation.",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "10GB Cloud Storage",
+          text: "Learn To Make a U-Turn",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "Personal Help Support",
+          text: "Limited Personal Support",
         },
         {
           change: "color",
           icon: <i class='fa-solid fa-x'></i>,
-          text: "Enterprise SLA",
+          text: "Assistance obtaining license", 
         },
       ],
     },
     {
-      plan: "Platinum",
-      price: "79",
+      plan: "Super",
+      price: "2500",
       ptext: "2 user, per month",
       list: [
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "100% Uptime Guarantee",
+          text: "13 driving lessons ",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "200GB CDN Bandwidth",
+          text: "How to Change Lanes as expert",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "20GB Cloud Storage",
+          text: "Specialized driving tests",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "Personal Help Support",
+          text: "Specialized Personal assistance ",
         },
         {
           icon: <i class='fa-solid fa-check'></i>,
-          text: "Enterprise SLA",
+          text: "assistance obtaining license",
         },
       ],
     },

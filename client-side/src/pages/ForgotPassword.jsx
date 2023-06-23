@@ -29,7 +29,7 @@ const ForgotPassword = () => {
           <input type="email" placeholder="Email" 
             required className='signin__input input__forget' 
             value={email} onChange={(event) => setEmail(event.target.value)} />
-            {message && <p className="error__message text-green">{message}</p>}
+            {message && <p className="success__message">{message}</p>}
           <button type='submit' className='signin__button'>Next</button>
         </form>
         <hr className='horizontal__line' />

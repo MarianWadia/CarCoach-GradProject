@@ -92,6 +92,12 @@
   font-size: 12px;
 }
 
+.success__message{
+  color: green;
+  margin-top: 0.2rem;
+  font-size: 12px;
+}
+
 .forget__password{
   cursor: pointer;
   letter-spacing: 0.2rem;

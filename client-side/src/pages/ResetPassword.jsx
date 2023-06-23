@@ -44,7 +44,7 @@ const ResetPassword = () => {
         <form className="input__container" onSubmit={handleSubmit}>
             <input type="password" placeholder="New Password" required className='signin__input' value={password} onChange={(event) => setPassword(event.target.value)} />
             <input type="password" placeholder="Confirm New Password" required className='signin__input'value={confirmPassword} onChange={handleConfirmPasswordChange} />
-            {message && <p className="error__message text-green">{message}</p>}
+            {message && <p className="success__message">{message}</p>}
             <button type='submit' className='signin__button'>Submit</button>
         </form>
         <hr className='horizontal__line' />

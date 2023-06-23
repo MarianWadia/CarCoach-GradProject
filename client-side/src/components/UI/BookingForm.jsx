@@ -122,6 +122,9 @@ useEffect(() => {
       icon: "error",
       button: "close",
     });
+    setTimeout(() => {
+      window.location.href = `/signup`
+    }, 6000);
   }
 }, [success, responseObject]);
 

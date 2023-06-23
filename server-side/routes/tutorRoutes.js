@@ -3,8 +3,36 @@ const pool = require('../db');
 const dotenv = require('dotenv');
 const multer = require('multer');
 const path = require('path');
+const nodemailer = require('nodemailer');
 
 dotenv.config();
+
+
+function sendEmail({ email, name}) {
+  return new Promise((resolve, reject) => {
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.FROM_EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.FROM_EMAIL,
+      to: email,
+      subject: 'Acceptance Email',
+      text: `Dear ${name}, Congratulations you have been accepted as a driving tutor in our platform`,
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+        return reject({ message: `An error has occurred` });
+      }
+      return resolve({ message: "Email sent successfully" });
+    });
+  });
+}
 
 const router = express.Router();
 const tutorImagesDir = path.resolve(__dirname, '..', 'upload', 'tutors');
@@ -175,12 +203,15 @@ router.get("/tutors-applicants/:id", async (req, res)=>{
  //update tutor acceptance in tutors_applicants table and is_tutor in users table -- by admin
   router.put("/tutors-applicants-admins/:tutor_id", async (req, res)=>{
     try {
-        const {tutor_id} = req.params.id;
+        const {tutor_id} = req.params;
         const update1 = await pool.query(`UPDATE tutors_applicants SET is_accepted = true WHERE id=${tutor_id}`);
         const resultUserId = await pool.query(`SELECT user_id FROM tutors_applicants WHERE id=${tutor_id}`);
-        const {userId} = resultUserId.rows[0];
-        const update2 = await pool.query(`UPDATE users SET is_tutor = true WHERE id=${userId}`);
-        res.status(200).json({message: "Updated Successfully!"})
+        const {user_id} = resultUserId.rows[0];
+        const update2 = await pool.query(`UPDATE users SET is_tutor = true WHERE id=${user_id}`);
+        const tutorData = await pool.query(`SELECT first_name, email From tutors_applicants WHERE id = ${tutor_id}`);
+        const {first_name, email} = tutorData.rows[0];
+        sendEmail({name: first_name, email}); 
+        res.status(200).json({message: "Updated Successfully and email sent!"})
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'An error occurred' });
