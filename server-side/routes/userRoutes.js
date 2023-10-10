@@ -46,9 +46,9 @@ router.post('/signup', async (req, res) => {
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         const updateToken = await pool.query('UPDATE users SET token = $1 WHERE id = $2', [token, user.id]);
         if(user.is_admin === true){
-          res.json({ token, id: user.id, redirectUrl: `http://localhost:3000/admin/${user.id}/users`});
+          res.json({ token, id: user.id, redirectUrl: `https://car-coach-grad-project.vercel.app/admin/${user.id}/users`});
         }else{
-          res.json({ token, id: user.id, redirectUrl: `http://localhost:3000/home/${user.id}`});
+          res.json({ token, id: user.id, redirectUrl: `https://car-coach-grad-project.vercel.app/home/${user.id}`});
         }
       }
     } catch (err) {
