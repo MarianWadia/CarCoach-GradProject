@@ -15,7 +15,7 @@ const CarListing = () => {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/car-uploads-all${searchValue?"/"+searchValue: ""}`);
+        const response = await axios.get(`https://carcoach-apis.onrender.com/api/car-uploads-all${searchValue?"/"+searchValue: ""}`);
         setData(response.data);
       } catch (error) {
         console.error(error);

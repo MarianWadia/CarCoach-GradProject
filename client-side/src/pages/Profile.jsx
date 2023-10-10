@@ -11,7 +11,7 @@ const Profile = () => {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/sessions-students/${id}`);
+        const response = await axios.get(`https://carcoach-apis.onrender.com/api/sessions-students/${id}`);
         setData(response.data);
       } catch (error) {
         console.error(error);

@@ -11,7 +11,7 @@ const AdminDetails = () => {
     useEffect(()=>{
         const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/admin/${name}`);
+            const response = await axios.get(`https://carcoach-apis.onrender.com/api/admin/${name}`);
             setData(response);
         } catch (error) {
             console.error(error);
@@ -23,7 +23,7 @@ const AdminDetails = () => {
 
     const handleDelete = async (id) => {
         try {
-          await axios.delete(`http://localhost:8080/api/admin/${name}/${id}`);
+          await axios.delete(`https://carcoach-apis.onrender.com/api/admin/${name}/${id}`);
           setData((prevData) => ({
             ...prevData,
             data: prevData.data.filter((row) => row.id !== id),

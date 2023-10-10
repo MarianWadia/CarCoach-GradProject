@@ -12,7 +12,7 @@ const ForgotPassword = () => {
       e.preventDefault();
   
       try {
-        const response = await axios.post('http://localhost:8080/api/password/forgot', { email });
+        const response = await axios.post('https://carcoach-apis.onrender.com/api/password/forgot', { email });
         setMessage(response.data);
       } catch (error) {
         setMessage(error.response.data);

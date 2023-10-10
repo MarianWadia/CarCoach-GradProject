@@ -16,7 +16,7 @@ const TutorDetails = () => {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/tutors-applicants/${tutor_id}`);
+        const response = await axios.get(`https://carcoach-apis.onrender.com/api/tutors-applicants/${tutor_id}`);
         setData(response.data);
       } catch (error) {
         console.error(error);

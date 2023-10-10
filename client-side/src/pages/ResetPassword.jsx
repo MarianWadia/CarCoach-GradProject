@@ -19,7 +19,7 @@ const ResetPassword = () => {
             return;
           }
         try {
-          const response = await axios.post('http://localhost:8080/api/password/reset', { token, password });
+          const response = await axios.post('https://carcoach-apis.onrender.com/api/password/reset', { token, password });
           setMessage(response.data.message);
           const id = response.data.id;
           if(id){

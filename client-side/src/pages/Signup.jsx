@@ -21,7 +21,7 @@ const Signup = () => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:8080/api/users/signup', { firstName, lastName, email, password });
+      const response = await axios.post('https://carcoach-apis.onrender.com/api/users/signup', { firstName, lastName, email, password });
       if(response.data.errorMessage){
         setPasswordError(response.data.errorMessage);
       }

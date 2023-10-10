@@ -48,7 +48,7 @@ const BookingForm = ({service}) => {
     event.preventDefault();
     try {
       const data = new FormData(event.target);
-      const response = await axios.post(`http://localhost:8080/api/tutors-applicants/${id}`, data);
+      const response = await axios.post(`https://carcoach-apis.onrender.com/api/tutors-applicants/${id}`, data);
       const responseData  = await response.data;
       setResponseObject(responseData);
       console.log(responseObject);
@@ -93,7 +93,7 @@ const BookingForm = ({service}) => {
     event.preventDefault();
     try {
       const data = new FormData(event.target);
-      const response = await axios.post(`http://localhost:8080/api/tutors-applicants/car/${tutorId}`, data);
+      const response = await axios.post(`https://carcoach-apis.onrender.com/api/tutors-applicants/car/${tutorId}`, data);
       const responseData  = await response.data;
       setResponseObject(responseData);
       console.log(responseObject);
@@ -133,7 +133,7 @@ const submitCarHandler = useCallback(async (event) => {
   event.preventDefault();
   try {
     const data = new FormData(event.target);
-    const response = await axios.post(`http://localhost:8080/api/car-uploads/${id?id:""}`, data);
+    const response = await axios.post(`https://carcoach-apis.onrender.com/api/car-uploads/${id?id:""}`, data);
     const responseData  = await response.data;
     setResponseObject(responseData);
     console.log(responseObject);
@@ -174,7 +174,7 @@ const submitTutorReservationHandler = useCallback(async (event) => {
       requestData[key] = value;
     });
     console.log(requestData);
-    const response = await axios.post(`http://localhost:8080/api/tutor-reserve/${user_id?user_id+"/":""}${tutor_id}`, requestData, {
+    const response = await axios.post(`https://carcoach-apis.onrender.com/api/tutor-reserve/${user_id?user_id+"/":""}${tutor_id}`, requestData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -200,7 +200,7 @@ const submitCarReservationHandler = useCallback(async (event) => {
     });
     console.log(requestData);
     // variable id here is the tutorid
-    const response = await axios.post(`http://localhost:8080/api/car-rent/${user_id?user_id+"/":""}${carId}`, requestData, {
+    const response = await axios.post(`https://carcoach-apis.onrender.com/api/car-rent/${user_id?user_id+"/":""}${carId}`, requestData, {
       headers: {
         'Content-Type': 'application/json'
       }

@@ -39,7 +39,7 @@ const Contact = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:8080/api/contact-us/${userId?userId:""}`, {
+      const response = await axios.post(`https://carcoach-apis.onrender.com/api/contact-us/${userId?userId:""}`, {
         name: name,
         email: email,
         message: message
