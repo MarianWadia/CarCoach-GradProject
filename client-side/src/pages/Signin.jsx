@@ -14,8 +14,9 @@ const Signin = () => {
     console.log('Form submitted');
     try {
       const response = await axios.post('https://carcoach-apis.onrender.com/api/users/signin', { email, password });
-      if(response.data.errorMessage){
-        setError(response.data.errorMessage);
+      if(response.data.message){
+        setError(response.data.message);
+        console.log(response.data.message)
       }else{
         localStorage.setItem('token', response.data.token);
         const {redirectUrl} = response.data;
