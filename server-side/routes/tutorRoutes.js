@@ -1,11 +1,12 @@
 const express = require('express');
 const pool = require('../db');
 const dotenv = require('dotenv');
-const multer = require('multer');
-const path = require('path');
 const nodemailer = require('nodemailer');
+const cloudinary = require('cloudinary').v2; 
+const multer = require('multer');
 
 dotenv.config();
+
 
 
 function sendEmail({ email, name}) {
@@ -35,20 +36,14 @@ function sendEmail({ email, name}) {
 }
 
 const router = express.Router();
-const tutorImagesDir = path.resolve(__dirname, '..', 'upload', 'tutors');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, tutorImagesDir); // Set the folder where you want to store the images
-  },
-  filename: function (req, file, cb) {
-      const fileExtension = path.extname(file.originalname);
-      const generatedFileName = `${file.fieldname}_${Date.now()}${fileExtension}`; // Generate a unique file name
-      cb(null, generatedFileName);
-  }
-})
-const upload = multer({ storage: storage });
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
+const upload = multer();
 
 router.post('/tutors-applicants/:id?', upload.fields([
     { name: 'driver_license', maxCount: 1 },
@@ -74,41 +69,78 @@ router.post('/tutors-applicants/:id?', upload.fields([
                 interview_date,
                 bio
             } = req.body;
-            const driver_license = req.files['driver_license'][0].path;
-            const driver_image_file = req.files['driver_image'][0].path;
-            const fileName = path.basename(driver_image_file);
-            const driver_image = `http://localhost:8080/api/tutor-image/${fileName}`
-            let tutorId;
-            if(is_own_car === "true"){
-                const result = await pool.query(
-                    `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, true) RETURNING *`, 
-                    [user_id, first_name, last_name, phone, email, age, 
-                      gender, address, experience_years, 
-                      driver_license, driver_image, 
-                      working_location, interview_time, 
-                      interview_date, 
-                      bio,
-                    ]);
-                 tutorId = result.rows[0].id;
-                res.status(201).send({
-                    tutorId: tutorId, 
-                    redirectionLink:`http://localhost:3000/join-us/${user_id}/upload-car/${tutorId}`,
-                    message: "Successfully uploaded"
-                })
-                console.log(tutorId);
-            }else if(is_own_car === "false"){
-                const result = await pool.query(
-                    `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, false) RETURNING *`, 
-                    [user_id, first_name, last_name, phone, email, age, 
-                      gender, address, experience_years, 
-                      driver_license, driver_image, 
-                      working_location, interview_time, 
-                      interview_date, 
-                      bio
-                    ]);
-                 tutorId = result.rows[0].id;
-                 res.status(201).json({tutorId: tutorId, message: "Successfully uploaded! We Will contact You Soon!"});
+
+            const driverLicense = req.files['driver_license'][0];
+            const driverImage = req.files['driver_image'][0];
+
+            const imageUrls = [];
+            const errors = [];
+      
+            // Function to upload an image to Cloudinary and return a promise
+            const uploadImageToCloudinary = (file) => {
+              return new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream((error, result) => {
+                  if (result) {
+                    resolve(result.secure_url);
+                  } else if (error) {
+                    reject(error);
+                  }
+                }).end(file.buffer);
+              });
+            };
+                 // Upload driver license image
+            try {
+              const resultLicense = await uploadImageToCloudinary(driverLicense);
+              imageUrls.push(resultLicense);
+            } catch (error) {
+              console.error(error);
+              errors.push("An error occurred during driver license image upload.");
             }
+
+            // Upload driver image
+            try {
+              const resultImage = await uploadImageToCloudinary(driverImage);
+              imageUrls.push(resultImage);
+            } catch (error) {
+              console.error(error);
+              errors.push("An error occurred during driver image upload.");
+            }
+
+            if (errors.length > 0) {
+              res.status(500).json({ message: 'Errors occurred during image upload' });
+            }else{
+              let tutorId;
+              if(is_own_car === "true"){
+                  const result = await pool.query(
+                      `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, true) RETURNING *`, 
+                      [user_id, first_name, last_name, phone, email, age, 
+                        gender, address, experience_years, 
+                        imageUrls[0], imageUrls[1], 
+                        working_location, interview_time, 
+                        interview_date, 
+                        bio,
+                      ]);
+                   tutorId = result.rows[0].id;
+                  res.status(201).send({
+                      tutorId: tutorId, 
+                      redirectionLink:`https://car-coach-grad-project.vercel.app/join-us/${user_id}/upload-car/${tutorId}`,
+                      message: "Successfully uploaded"
+                  })
+                  console.log(tutorId);
+              }else if(is_own_car === "false"){
+                  const result = await pool.query(
+                      `INSERT INTO tutors_applicants (user_id, first_name, last_name, phone, email, age, gender, address, experience_years, driver_license, driver_image, working_location, interview_time, interview_date, bio, is_own_car) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, false) RETURNING *`, 
+                      [user_id, first_name, last_name, phone, email, age, 
+                        gender, address, experience_years, 
+                        imageUrls[0], imageUrls[1], 
+                        working_location, interview_time, 
+                        interview_date, 
+                        bio
+                      ]);
+                   tutorId = result.rows[0].id;
+                   res.status(201).json({tutorId: tutorId, message: "Successfully uploaded! We Will contact You Soon!"});
+              }
+          }
         }
     } catch (error) {
       console.error(error);
@@ -120,24 +152,35 @@ router.post('/tutors-applicants/car/:tutorId', upload.single('car_image'), async
     try {
         const {tutorId} = req.params
         const{ motor_type, color, model, year, license_plate, hour_price, hour_speed, details} = req.body;
-        const car_image_file = req.file.path;
-        const fileName = path.basename(car_image_file);
-        const car_image = `http://localhost:8080/api/tutor-image/${fileName}`
-        // ***they are made just needed to be tested
-        const carInsert = await pool.query(`INSERT INTO car_uploads (tutor_id, motor_type, color, model, year, license_plate, car_image, hour_price, hour_speed, details, usage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'coaching') RETURNING id`, [
-            tutorId,
-            motor_type, 
-            color,
-            model,
-            year,
-            license_plate,
-            car_image,
-            hour_price,
-            hour_speed,
-            details
-        ]);
-        res.status(201).json({message: "Uploaded successfully, We Will contact You Soon!"})
-    } catch (error) {
+        const car_image = req.file.buffer; // Image data from the upload
+
+        // Upload the image to Cloudinary
+        await new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream(async (error, result) => {
+            if (result) {
+              const car_image_url = result.secure_url; 
+              const carInsert = await pool.query(`INSERT INTO car_uploads (tutor_id, motor_type, color, model, year, license_plate, car_image, hour_price, hour_speed, details, usage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'coaching') RETURNING id`, [
+                  tutorId,
+                  motor_type, 
+                  color,
+                  model,
+                  year,
+                  license_plate,
+                  car_image_url,
+                  hour_price,
+                  hour_speed,
+                  details
+              ]);
+              res.status(201).json({message: "Uploaded successfully, We Will contact You Soon!"})
+              resolve();
+            } else if (error) {
+              console.error(error);
+              res.status(500).json({ message: 'An error occurred' });
+              reject();
+            }
+          }).end(car_image);
+        });
+      }catch (error) {
         console.error(error);
         res.status(500).json({ message: 'An error occurred' });
     }

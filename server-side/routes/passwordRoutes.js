@@ -30,7 +30,7 @@ function sendEmail({ email, token }) {
       from: process.env.FROM_EMAIL,
       to: email,
       subject: 'Reset Your Password',
-      text: `Click on this link to reset your password: http://localhost:3000/reset/${token}`,
+      text: `Click on this link to reset your password: https://car-coach-grad-project.vercel.app/reset/${token}`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
